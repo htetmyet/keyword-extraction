@@ -94,17 +94,20 @@ def main():
     get_tri_gram = NP_tri_gram_set
     get_quard_gram = NP_quard_gram_set
 
-    #Get uni-grams NP
     bag_of_NP = []
+    #Get uni-grams NP
+    print "UNIGRAM -->"
     for k, s in enumerate(get_nouns):
-        for match in finditer(get_uni_gram, s):
+        for match in finditer(get_tri_gram, s):
             x, y = match.span() #the match spans x to y inside the sentence s
-            #print pos_tag[k][x:y]
+            print pos_tag[k][x:y]
             bag_of_NP += pos_tag[k][x:y]
+        
     print "Term Frequency for each:"
     fdist = nltk.FreqDist(bag_of_NP)
     for word in fdist:
         print '%s->%d' % (word, fdist[word])
+    print "\n\n"    
 
 if __name__ == '__main__':
     main()
