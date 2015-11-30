@@ -46,7 +46,7 @@ def main():
     pos_tag = [nltk.pos_tag(sent) for sent in token_word]
 
     print title
-    print "Sentence: ", num_sent
+    print "Sentence: ", num_sent-1
     
     #Chunk and print NP
     get_nouns = [[Word(*x) for x in sent] for sent in pos_tag]
@@ -95,19 +95,49 @@ def main():
     get_quard_gram = NP_quard_gram_set
 
     bag_of_NP = []
+    bag_of_biNP = []
+    bag_of_triNP = []
+    bag_of_fourNP = []
     #Get uni-grams NP
     print "UNIGRAM -->"
     for k, s in enumerate(get_nouns):
-        for match in finditer(get_tri_gram, s):
+        for match in finditer(get_uni_gram, s):
             x, y = match.span() #the match spans x to y inside the sentence s
             print pos_tag[k][x:y]
             bag_of_NP += pos_tag[k][x:y]
-        
+    print len(bag_of_NP)    
     print "Term Frequency for each:"
     fdist = nltk.FreqDist(bag_of_NP)
     for word in fdist:
         print '%s->%d' % (word, fdist[word])
-    print "\n\n"    
+    print "\n\n"
+
+    print "BIGRAM -->"
+    for k, s in enumerate(get_nouns):
+        for match in finditer(get_bi_gram, s):
+            x, y = match.span()
+            print pos_tag[k][x:y]
+            bag_of_biNP += pos_tag[k][x:y]
+    print len(bag_of_NP)        
+    print "\n\n"
+
+    print "TRIGRAM -->"
+    for k, s in enumerate(get_nouns):
+        for match in finditer(get_tri_gram, s):
+            x, y = match.span()
+            print pos_tag[k][x:y]
+            bag_of_triNP += pos_tag[k][x:y]
+    print len(bag_of_NP)
+    print "\n\n"
+
+    print "4th GRAM -->"
+    for k, s in enumerate(get_nouns):
+        for match in finditer(get_quard_gram, s):
+            x,y = match.span()
+            print pos_tag[k][x:y]
+            bag_of_fourNP += pos_tag[k][x:y]
+    print len(bag_of_NP)
+    print "\n\n"
 
 if __name__ == '__main__':
     main()
