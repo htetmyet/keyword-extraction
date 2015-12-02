@@ -1,8 +1,16 @@
 from refo import finditer, Predicate, Plus
 from collections import Counter
+##from nltk.corpus import stopwords
 import nltk
 import re
 import copy
+
+##cachedStopWords = stopwords.words("english")
+
+def remov_stopword(text):
+    stopwords = open ('smartstoplist.txt', 'r').read().splitlines()
+    text = ' '.join([word for word in text.split() if word not in stopwords])
+    return text
 
 def get_title(text):
     pre_title = text.splitlines()[0]
@@ -27,7 +35,6 @@ def main():
     
     test_file = open('dataset/001.txt', 'r')
     rawtext = test_file.read()
-    stopwords = open ('smartstoplist.txt', 'r').read().splitlines()
     
     #Extract title from text
     title = get_title(rawtext)
@@ -38,21 +45,23 @@ def main():
     
     #Prettify paragraph
     prettify_txt = re.sub(r'[^\w.]', ' ', para_string)
+    mod_txt = remov_stopword(prettify_txt)
     
     #Tokenizing & POS Tagging
-    token_txt = nltk.sent_tokenize(prettify_txt) #Line Segment
+    token_txt = nltk.sent_tokenize(mod_txt) #Line Segment
     
     num_sent = len(token_txt) #Number of sentences
     token_word = [nltk.word_tokenize(sent) for sent in token_txt]
     pos_tag = [nltk.pos_tag(sent) for sent in token_word]
 
     print title
-    print type(prettify_txt)
     print "Sentence: ", num_sent
+    print '\n'
     
     #Chunk and print NP
     get_nouns = [[Word(*x) for x in sent] for sent in pos_tag]
 
+    #NNP Rules
     rule_0 = W(pos = "NN") | W(pos = "NNP")
     rule_1 = W(pos = "WP$") + W(pos = "NNS")
     rule_2 = W(pos = "CD") + W(pos = "NNS")
