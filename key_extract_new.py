@@ -25,9 +25,9 @@ class W(Predicate):
             
 def main():
     
-    test_file = open('dataset/macbook_pro.txt', 'r')
+    test_file = open('dataset/001.txt', 'r')
     rawtext = test_file.read()
-    #stopwords = open ('smartstoplist.txt', 'r').read()
+    stopwords = open ('smartstoplist.txt', 'r').read().splitlines()
     
     #Extract title from text
     title = get_title(rawtext)
@@ -41,12 +41,14 @@ def main():
     
     #Tokenizing & POS Tagging
     token_txt = nltk.sent_tokenize(prettify_txt) #Line Segment
+    
     num_sent = len(token_txt) #Number of sentences
     token_word = [nltk.word_tokenize(sent) for sent in token_txt]
     pos_tag = [nltk.pos_tag(sent) for sent in token_word]
 
     print title
-    print "Sentence: ", num_sent-1
+    print type(prettify_txt)
+    print "Sentence: ", num_sent
     
     #Chunk and print NP
     get_nouns = [[Word(*x) for x in sent] for sent in pos_tag]
@@ -98,45 +100,77 @@ def main():
     bag_of_biNP = []
     bag_of_triNP = []
     bag_of_fourNP = []
-    #Get uni-grams NP
+    ############GET UNIGRAMS############
     print "UNIGRAM -->"
     for k, s in enumerate(get_nouns):
         for match in finditer(get_uni_gram, s):
             x, y = match.span() #the match spans x to y inside the sentence s
             print pos_tag[k][x:y]
             bag_of_NP += pos_tag[k][x:y]
-    print len(bag_of_NP)    
-    print "Term Frequency for each:"
+    #Term Frequency for unigrams    
+    print "\nTerm Frequency for each:"
     fdist = nltk.FreqDist(bag_of_NP)
     for word in fdist:
         print '%s->%d' % (word, fdist[word])
+        #fdist[word] gives the frequency of each term in fdist
+    print '===============***==============='
+    print 'Total Unigrams: ', len(fdist)
+    print 'Totoal term frequency: ', len(bag_of_NP)
+    print '===============***==============='
     print "\n\n"
 
+    ############GET BIGRAMS############
     print "BIGRAM -->"
     for k, s in enumerate(get_nouns):
         for match in finditer(get_bi_gram, s):
             x, y = match.span()
             print pos_tag[k][x:y]
             bag_of_biNP += pos_tag[k][x:y]
-    print len(bag_of_NP)        
+    #Term Frequency for bigrams
+    print "\nTerm Frequency for bi:"
+    bi_dist = nltk.FreqDist(bag_of_biNP)
+    for word in bi_dist:
+        print '%s-->%d' % (word, bi_dist[word])
+    print '===============***==============='
+    print 'Total Bigrams: ', len(bi_dist)
+    print 'Totoal term frequency: ', len(bag_of_biNP)
+    print '===============***==============='
     print "\n\n"
 
+    ############GET TRIGRAMS############
     print "TRIGRAM -->"
     for k, s in enumerate(get_nouns):
         for match in finditer(get_tri_gram, s):
             x, y = match.span()
             print pos_tag[k][x:y]
             bag_of_triNP += pos_tag[k][x:y]
-    print len(bag_of_NP)
+    #Term Frequency for trigrams
+    print "\nTerm Frequency for tri:"
+    tri_dist = nltk.FreqDist(bag_of_triNP)
+    for word in tri_dist:
+        print '%s-->%d' % (word, tri_dist[word])
+    print '===============***==============='
+    print 'Total Trigrams: ', len(tri_dist)
+    print 'Total term frequency: ', len(bag_of_triNP)
+    print '===============***==============='
     print "\n\n"
 
+    ############GET 4-GRAMS############
     print "4th GRAM -->"
     for k, s in enumerate(get_nouns):
         for match in finditer(get_quard_gram, s):
             x,y = match.span()
             print pos_tag[k][x:y]
             bag_of_fourNP += pos_tag[k][x:y]
-    print len(bag_of_NP)
+    #Term Frequency for 4-grams
+    print "\nTerm Frequency for 4:"
+    f_dist = nltk.FreqDist(bag_of_fourNP)
+    for word in f_dist:
+        print '%s-->%d' % (word, f_dist[word])
+    print '===============***==============='
+    print 'Total 4-grams: ', len(f_dist)
+    print 'Total term frequency: ', len(bag_of_fourNP)
+    print '===============***==============='
     print "\n\n"
 
 if __name__ == '__main__':
