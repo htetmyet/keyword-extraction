@@ -1,11 +1,20 @@
 from refo import finditer, Predicate, Plus
 from collections import Counter
+
 ##from nltk.corpus import stopwords
+import math
 import nltk
 import re
 import copy
+import glob
 
 ##cachedStopWords = stopwords.words("english")
+
+def convert_to_string(text):
+    get_index = text.index(':')
+    get_length = len(text)
+    get_string = text[0:get_index]
+    return get_string
 
 def remov_stopword(text):
     stopwords = open ('smartstoplist.txt', 'r').read().splitlines()
@@ -15,6 +24,10 @@ def remov_stopword(text):
 def get_title(text):
     pre_title = text.splitlines()[0]
     return pre_title
+
+def get_first_sen(text):
+    get_first = text.splitlines()[1]
+    return get_first
 
 class Word(object):
     def __init__(self, token, pos):
@@ -30,15 +43,49 @@ class W(Predicate):
         m1 = self.token.match(word.token)
         m2 = self.pos.match(word.pos)
         return m1 and m2
-            
+
+def term_frequency(w_tf):
+    tf_score = 1 + math.log10(w_tf)
+    return tf_score
+
+def count_total_corpus():
+    tot_corpus =  len(glob.glob1("dataset","00*.txt"))
+    return tot_corpus
+
+def count_nterm_doc(word):
+    num_count = 0
+    get_total = count_total_corpus()
+    while (get_total>0):
+        n_files = str(get_total)
+        get_doc = open('dataset/00'+n_files+'.txt', 'r')
+        raw_doc = get_doc.read()
+        if word in raw_doc:
+           num_count += 1
+        else:
+            num_count += 0
+        get_total -= 1
+    return num_count
+
+def inverse_df(tot_doc, num_of_x_doc):
+    idf_score = math.log10(1+(tot_doc/num_of_x_doc))
+    return idf_score
+
+def chk_frs_sen(word, fir_sen):##1 or 0 (string)
+    if word in fir_sen:
+        result_this = 'yes'
+    else:
+        result_this = 'no'
+    return result_this
+
 def main():
-    
-    test_file = open('dataset/001.txt', 'r')
+    file_name = 'dataset/001.txt'
+    test_file = open(file_name, 'r')
     rawtext = test_file.read()
     
     #Extract title from text
     title = get_title(rawtext)
-
+    first_sen = get_first_sen(rawtext)
+    
     #Get paragraph without title
     para_list = rawtext.splitlines()[1:] #in list
     para_string = ''.join(para_list) #convert to string
@@ -109,6 +156,7 @@ def main():
     bag_of_biNP = []
     bag_of_triNP = []
     bag_of_fourNP = []
+    total__tfidf = 0
     ############GET UNIGRAMS############
     print "UNIGRAM -->"
     for k, s in enumerate(get_nouns):
@@ -118,13 +166,36 @@ def main():
             bag_of_NP += pos_tag[k][x:y]
     #Term Frequency for unigrams    
     print "\nTerm Frequency for each:"
+    total_docs = count_total_corpus()
     fdist = nltk.FreqDist(bag_of_NP)
     for word in fdist:
-        print '%s->%d' % (word, fdist[word])
-        #fdist[word] gives the frequency of each term in fdist
+        fq_word = fdist[word]
+        print '%s->%d' % (word, fq_word)
+        get_tf = term_frequency(fq_word)
+
+        ### FEATURES ###
+        ##Tuple to String##
+        to_string = ':'.join(word)
+        get_this_string = convert_to_string(to_string)
+        ##DF Score
+        num_of_doc_word = count_nterm_doc(get_this_string)
+        ##
+        ##TF.IDF Score
+        idf_score = inverse_df(total_docs, num_of_doc_word)
+        tf_idf_scr = get_tf * idf_score
+        total__tfidf += tf_idf_scr
+
+        ##In First Sentence
+        first_sen = chk_frs_sen(get_this_string, first_sen)
+        
+        print 'TF.IDF: ', tf_idf_scr
+        print 'In 1st sentence: ', first_sen
+        print '\n'
+      
+        
     print '===============***==============='
     print 'Total Unigrams: ', len(fdist)
-    print 'Totoal term frequency: ', len(bag_of_NP)
+    print 'Average TF.IDF: ', total__tfidf/len(fdist)
     print '===============***==============='
     print "\n\n"
 
@@ -135,6 +206,8 @@ def main():
             x, y = match.span()
             print pos_tag[k][x:y]
             bag_of_biNP += pos_tag[k][x:y]
+    ##bigrams = Counter(zip(bag_of_biNP,bag_of_biNP[1:]))
+    ##print(bigrams)
     #Term Frequency for bigrams
     print "\nTerm Frequency for bi:"
     bi_dist = nltk.FreqDist(bag_of_biNP)
@@ -142,8 +215,8 @@ def main():
         print '%s-->%d' % (word, bi_dist[word])
     print '===============***==============='
     print 'Total Bigrams: ', len(bi_dist)
-    print 'Totoal term frequency: ', len(bag_of_biNP)
-    print '===============***==============='
+    print 'Total term frequency: ', len(bag_of_biNP)
+    print '===============***==============='    
     print "\n\n"
 
     ############GET TRIGRAMS############
