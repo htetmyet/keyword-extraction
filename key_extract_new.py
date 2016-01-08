@@ -70,12 +70,24 @@ def inverse_df(tot_doc, num_of_x_doc):
     idf_score = math.log10(1+(tot_doc/num_of_x_doc))
     return idf_score
 
-def chk_frs_sen(word, fir_sen):##1 or 0 (string)
-    if word in fir_sen:
-        result_this = 'yes'
+def chk_frs_sen(word, file_name):##1 or 0 (binary)
+    test_file = open(file_name, 'r')
+    rawtext = test_file.read()
+    first_sen = get_first_sen(rawtext)
+    result_this = 0
+    if word in first_sen:
+        result_this = 1
     else:
-        result_this = 'no'
+        result_this = 0
     return result_this
+
+def involve_in_title(word, get_title):
+    result_this = 0
+    if word in get_title:
+        result_this = 1
+    else:
+        result_this = 0
+    return result_this   
 
 def main():
     file_name = 'dataset/001.txt'
@@ -162,8 +174,9 @@ def main():
     for k, s in enumerate(get_nouns):
         for match in finditer(get_uni_gram, s):
             x, y = match.span() #the match spans x to y inside the sentence s
-            print pos_tag[k][x:y]
+            ##print pos_tag[k][x:y]
             bag_of_NP += pos_tag[k][x:y]
+            
     #Term Frequency for unigrams    
     print "\nTerm Frequency for each:"
     total_docs = count_total_corpus()
@@ -186,10 +199,14 @@ def main():
         total__tfidf += tf_idf_scr
 
         ##In First Sentence
-        first_sen = chk_frs_sen(get_this_string, first_sen)
-        
+        first_sen = chk_frs_sen(get_this_string, file_name)
+
+        ##Involve in Title
+        in_title = involve_in_title(get_this_string, title)
+
         print 'TF.IDF: ', tf_idf_scr
         print 'In 1st sentence: ', first_sen
+        print 'In Title: ', in_title
         print '\n'
       
         
