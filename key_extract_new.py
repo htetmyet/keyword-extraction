@@ -90,7 +90,8 @@ def involve_in_title(word, get_title):
     return result_this   
 
 def main():
-    file_name = 'dataset/001.txt'
+    ##set_file_name = raw_input('Enter a file name: ')
+    file_name = raw_input('Enter a file name: ')
     test_file = open(file_name, 'r')
     rawtext = test_file.read()
     
@@ -152,7 +153,6 @@ def main():
     rule_28 = W(pos = "DT") + W(pos = "JJ") + W(pos = "NN")
     rule_29 = W(pos = "DT") + W(pos = "NNP") + W(pos = "NNP") + W(pos = "NNP")
     rule_30 = W(pos = "DT") + W(pos = "NNP") + W(pos = "NN") + W(pos = "NN") 
-
 
     NP_bi_gram_set = (rule_1)|(rule_2)|(rule_3)|(rule_4)|(rule_5)|(rule_6)|(rule_7)|(rule_8)|(rule_9)|(rule_10)|(rule_11)|(rule_12)|(rule_13)|(rule_14)|(rule_15)|(rule_16)
     NP_tri_gram_set = (rule_17)|(rule_18)|(rule_19)|(rule_20)|(rule_21)|(rule_22)|(rule_23)|(rule_24)|(rule_25)|(rule_26)|(rule_27)|(rule_28)

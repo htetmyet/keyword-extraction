@@ -296,7 +296,6 @@ needs
 neither
 never
 nevertheless
-new
 next
 nine
 no
@@ -431,7 +430,6 @@ thanx
 that
 that's
 thats
-the
 their
 theirs
 them
