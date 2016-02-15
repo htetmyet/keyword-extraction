@@ -1,0 +1,30 @@
+Southeast Asia¡¯s GrabTaxi opens office in Seattle to attract U.S. engineering talent
+GrabTaxi, the billion-dollar on-demand taxi service that rivals Uber in Southeast Asia, is opening its first office in the U.S. as it seeks to widen its hiring efforts. 
+
+The growth of unicorns worldwide has made the sight of overseas companies hiring on U.S. soil fairly common, particularly Indian companies targeting potential returnees home. But this initiative isn¡¯t about GrabTaxi moving U.S.-based hires to its Singapore HQ. It already does that. Instead, it is setting up a fully functional engineering office in Seattle which will house a portion of its tech and data team on a full-time basis, offering an alternative location for those who prefer to remain in the U.S. rather than move to Asia. 
+
+Seattle-based staff will work in tandem with GrabTaxi¡¯s existing data team in Singapore and its smaller offshoot based in Beijing, China. 
+
+Seattle is home to Amazon, Microsoft and other tech firms, and GrabTaxi, which is operational in six countries in Southeast Asia and includes SoftBank among its investors, hopes that it can skim that talent pool to boost its ranks. 
+
+¡°We are excited to announce our new engineering center in Seattle, which will help attract top talent in the U.S. and expand our global talent reach. As we continue our work on building an on-demand ecosystem in Southeast Asia, it is important to look all over the world for innovative ideas and people that will help us continue to succeed in that mission,¡± Anthony Tan, its co-founder and CEO, said in a statement. 
+
+GrabTaxi said it has already made hires in Seattle, including 23-year Microsoft veteran Raman Narayanan, who will lead the office and its general hiring efforts in the U.S. Narayanan, formerly part of Microsoft¡¯s highly-regarded ¡°distinguished engineer¡± program, has joined as Technical Advisor and will work closely with Arul Kumaravel, GrabTaxi¡¯s Singapore-based VP of Engineering. (Kumaravel also has a Seattle connection, having previously been Head of Engineering for Amazon¡¯s mobile platform.) 
+
+¡°GrabTaxi has been rapidly growing and is working on large scale infrastructure and data problems. We¡¯re trying to solve complex problems using big data and were thinking about hiring talent all over the world,¡± Kumaravel told TechCrunch in an interview. ¡°There¡¯s a great talent pool [for these kind of jobs] in the Seattle area.¡± 
+
+GrabTaxi currently has around 80 engineers located at its new $100 million R&D hub in Singapore with a further dozen located in Beijing. Kumaravel said there is no specific target for the headcount in Seattle. The company plans to spend 2016 picking out the right candidates to come aboard at its U.S. base. 
+
+¡°We feel this is an opportunity for people to work on large scale problems, and improve the lives of people [and] make a social impact,¡± he said, when asked what the appeal of switching from U.S. companies to GrabTaxi might be. 
+
+That¡¯s in fact one of the core reasons that Narayanan said drew him to this new challenge. 
+
+¡°I am excited to leverage my startup/entrepreneur background and experience at Microsoft as a ¡®distinguished engineer¡¯ to change the way people move, commute, shop and consume,¡± he told TechCrunch via email. 
+
+¡°It is exciting to me that GrabTaxi is still only at the beginning of its trajectory ? the company has achieved significant scale and market penetration across a rapidly-growing market, but there is still tremendous runway to further develop the platform and create new and exciting products,¡± Narayanan added. 
+
+GrabTaxi will hope that the challenge resonates with other engineers and data specialists based in the U.S., although it is already getting some help from North America in the form of Lyft. GrabTaxi, Lyft, China¡¯s Didi Kuaidi and India-based Ola ? all of which rival Uber in their respective markets ? palled up recently when they announced a global alliance in December. 
+
+That coming-together will, in time, allow users of each app to use any other alliance company¡¯s app when they go abroad, but Kumaravel said that the collaboration extends to general business knowledge and information sharing, particularly around engineering and tech. 
+
+¡°We agreed to share best practices and technology-related work. We regularly share notes with the other companies,¡± he explained.

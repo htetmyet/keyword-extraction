@@ -104,6 +104,10 @@ def get_val_tripairs(tri_dict, trigrams):
     val_pairs = [(tri_dict[x]+tri_dict[y]+tri_dict[z]) for x,y,z in trigrams]
     return val_pairs
 
+def get_val_fpairs(fgram_dict, fourgrams):
+    val_pairs = [(fgram_dict[a]+fgram_dict[b]+fgram_dict[c]+fgram_dict[d]) for a,b,c,d in fourgrams]
+    return val_pairs
+
 def main():
     ##set_file_name = raw_input('Enter a file name: ')
     file_name = raw_input('Enter a file name: ')
@@ -196,7 +200,7 @@ def main():
 
     ###############      
     #Term Frequency for unigrams    
-    print "\nTerm Frequency for each:"
+    print "\nUnigram Feature Matrices:"
     total__tfidf = 0
     uni_tfidf_values = ''
     str_uni_grams = ''
@@ -304,7 +308,7 @@ def main():
     
     ###############
     
-    print "\nTerm Frequency for bi:"
+    print "\nBigram Feature Matrices:"
     bi_dist = nltk.FreqDist(bag_of_biNP)
     for word in bi_dist:
         
@@ -395,7 +399,7 @@ def main():
     for k, s in enumerate(get_nouns):
         for match in finditer(get_tri_gram, s):
             x, y = match.span()
-            print pos_tag[k][x:y]
+            ##print pos_tag[k][x:y]
             bag_of_triNP += pos_tag[k][x:y]
             
     #Term Frequency for trigrams
@@ -404,14 +408,13 @@ def main():
     str_tri_grams = ''
     ###############
     
-    ##STORE BIGRAMS
+    ##STORE TRIGRAMS
     unzipped_tri = zip(*bag_of_triNP)
     str_trigrams = list(unzipped_tri[0])
-    get_trigrams = zip(str_trigrams,str_trigrams[1:],str_trigrams[2:3])[::3]
-    print get_trigrams
+    get_trigrams = zip(str_trigrams,str_trigrams[1:],str_trigrams[2:])[::3]
     ###############
     
-    print "\nTerm Frequency for tri:"
+    print "\nTrigram Feature Matrices:"
     tri_dist = nltk.FreqDist(bag_of_triNP)
     for word in tri_dist:
         tr_fq = tri_dist[word]
@@ -444,19 +447,50 @@ def main():
     ##GET TFIDF FOR TRIGRAMS##
     get_tri_floats = get_val_tripairs(trigram_dict, get_trigrams)
     get_tri_zip = dict(zip(get_trigrams, get_tri_floats))
-    print get_tri_zip
     ############
-    real_avg_tfidf = (sum(map(float,get_bi_floats)))/(len(get_bi_floats))
+    tri_avg_tfidf = (sum(map(float,get_tri_floats)))/(len(get_tri_floats))
     ###########################
-    get_zip_str = [' '.join(item) for item in get_bigrams]
+    get_ziptri_str = [' '.join(item) for item in get_trigrams]
     ###Bigrams string with TFIDF###
-    bigrams_list =  zip(get_zip_str, get_bi_floats)
+    trigrams_list =  zip(get_ziptri_str, get_tri_floats)
     ###########################
     print '===============***==============='
-    print 'Total Trigrams: ', len(tri_dist)
-    print 'Total tfidf', total__tfidf
-    print 'Real avg TF.IDF: '
+    print 'Total Trigrams: ', len(get_tri_floats)
+    print 'Total tfidf', sum(map(float,get_tri_floats))
+    print 'Average TF.IDF: ', tri_avg_tfidf
     print '===============***==============='
+    ##### TFIDF FEATURE MATRIX #####
+    tri_tfidf_matx = []
+    for x in trigrams_list:
+        if float(x[1]) > tri_avg_tfidf:
+            tri_tfidf_matx.append(1)
+        else:
+            tri_tfidf_matx.append(0)
+            
+    tri_tfidf_feat = zip(get_ziptri_str, get_tri_floats, tri_tfidf_matx)
+    #################################
+    #### FIRST SENTENCE FEATURE ####
+    tri_fir_sen = []
+    for x in tri_tfidf_feat:
+        get_res = chk_frs_sen(x[0], file_name)
+        if get_res == 1:
+            tri_fir_sen.append(1)
+        else:
+            tri_fir_sen.append(0)
+            
+    tri_sen_feat = zip (get_ziptri_str, get_tri_floats, tri_tfidf_matx, tri_fir_sen)
+    #################################
+    #### INVOLVE IN TITLE FEATURE ###
+    tri_invol_tit = []
+    for x in tri_sen_feat:
+        get_res = involve_in_title(x[0], title)
+        if get_res == 1:
+            tri_invol_tit.append(1)
+        else:
+            tri_invol_tit.append(0)
+    tri_tit_feat = zip (get_ziptri_str, get_tri_floats, tri_tfidf_matx, tri_fir_sen, tri_invol_tit)
+    print tri_tit_feat
+    #################################
     print "\n\n"
 
     ###################################GET 4-GRAMS###################################
@@ -464,16 +498,28 @@ def main():
     for k, s in enumerate(get_nouns):
         for match in finditer(get_quard_gram, s):
             x,y = match.span()
-            print pos_tag[k][x:y]
+            ##print pos_tag[k][x:y]
             bag_of_fourNP += pos_tag[k][x:y]
+
+    #Term Frequency for 4-grams
+    total__tfidf = 0
+    four_tfidf_values = ''
+    str_four_grams = ''
+    ###############
+    
+    ##STORE 4-GRAMS
+    unzipped_four = zip(*bag_of_fourNP)
+    str_fourgrams = list(unzipped_four[0])
+    get_fourgrams = zip(str_fourgrams,str_fourgrams[1:],str_fourgrams[2:],str_fourgrams[3:])[::4]
+    ###############
     
     #Term Frequency for 4-grams
     total__tfidf = 0
-    print "\nTerm Frequency for 4:"
+    print "\n4-grams Feature Matrices:"
     f_dist = nltk.FreqDist(bag_of_fourNP)
     for word in f_dist:
         fr_fq = f_dist[word]
-        print '%s-->%d' % (word, fr_fq)
+        ##print '%s-->%d' % (word, fr_fq)
         get_tf = term_frequency(fr_fq)
 
         ### FEATURES ###
@@ -488,30 +534,64 @@ def main():
         tf_idf_scr = get_tf * idf_score
         total__tfidf += tf_idf_scr
 
-        ##In First Sentence
-        first_sen = chk_frs_sen(get_this_string, file_name)
+        ##GET EACH FOURGRAMS TFIDF
+        get_tfidf_scr = repr(tf_idf_scr)+' '
+        four_tfidf_values += get_tfidf_scr
+        str_four_grams += get_this_string+','
 
-        ##Involve in Title
-        in_title = involve_in_title(get_this_string, title)
+    ##BUILD DICT FOR EACH TERMS
+    get_four_float = [float(x) for x in four_tfidf_values.split()]
+    get_four_list = str_four_grams.split(',')
+    fourgram_dict = dict(zip(get_four_list, get_four_float))
+    ###########################
 
-        ##tfidf_values += tf_idf_scr
-        print 'TF.IDF: ', tf_idf_scr
-        print 'In 1st sentence: ', first_sen
-        print 'In Title: ', in_title
-        print '\n'
+    ##GET TFIDF FOR 4-GRAMS##
+    get_four_floats = get_val_fpairs(fourgram_dict, get_fourgrams)
+    get_four_zip = dict(zip(get_fourgrams, get_four_floats))
+    ############
+    four_avg_tfidf = (sum(map(float,get_four_floats)))/(len(get_four_floats))
+    ###########################
+    get_zipfour_str = [' '.join(item) for item in get_fourgrams]
+    ###Bigrams string with TFIDF###
+    fourgrams_list =  zip(get_zipfour_str, get_four_floats)
+    ###########################
     print '===============***==============='
-    print 'Total 4-grams: ', len(f_dist)
-    print 'Total tfidf', total__tfidf
-    try:
-        avg_tfidf = total__tfidf/(len(f_dist))
-    except ZeroDivisionError as e:
-        print 'zero result.'
-    print 'Average TF.IDF: ', avg_tfidf
-    print 'Real avg TF.IDF: ', avg_tfidf*4
+    print 'Total 4-grams: ', len(get_four_floats)
+    print 'Total tfidf', sum(map(float,get_four_floats))
+    print 'Average TF.IDF: ', four_avg_tfidf
     print '===============***==============='
-    print "\n\n"
-    
-
+    ##### TFIDF FEATURE MATRIX #####
+    four_tfidf_matx = []
+    for x in fourgrams_list:
+        if float(x[1]) > four_avg_tfidf:
+            four_tfidf_matx.append(1)
+        else:
+            four_tfidf_matx.append(0)
+            
+    four_tfidf_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx)
+    #################################
+    #### FIRST SENTENCE FEATURE ####
+    four_fir_sen = []
+    for x in four_tfidf_feat:
+        get_res = chk_frs_sen(x[0], file_name)
+        if get_res == 1:
+            four_fir_sen.append(1)
+        else:
+            four_fir_sen.append(0)
+            
+    four_sen_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen)
+    #################################
+    #### INVOLVE IN TITLE FEATURE ###
+    four_invol_tit = []
+    for x in tri_sen_feat:
+        get_res = involve_in_title(x[0], title)
+        if get_res == 1:
+            four_invol_tit.append(1)
+        else:
+            four_invol_tit.append(0)
+    four_tit_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit)
+    print four_tit_feat
+    #################################
 if __name__ == '__main__':
     main()
 
