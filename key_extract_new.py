@@ -468,7 +468,7 @@ def main():
             tri_tfidf_matx.append(0)
             
     tri_tfidf_feat = zip(get_ziptri_str, get_tri_floats, tri_tfidf_matx)
-    #################################
+    ################################
     #### FIRST SENTENCE FEATURE ####
     tri_fir_sen = []
     for x in tri_tfidf_feat:
