@@ -264,7 +264,7 @@ def main():
         else:
             uni_feat_tfidf.append(0)
     zip_tfidf_feat = zip(get_zip_str, get_uni_float, uni_feat_tfidf)
-    ################################
+    ###############################
     ##### First Sentence Feat #####
     uni_fir_sen = []
     for x in unigrams_list:
@@ -274,7 +274,7 @@ def main():
         else:
             uni_fir_sen.append(0)
     zip_fir_sen_feat = zip(get_zip_str, get_uni_float, uni_feat_tfidf, uni_fir_sen)
-    ################################
+    ############################
     ##### Involve in Title #####
     uni_title_feat = []
     for x in unigrams_list:
