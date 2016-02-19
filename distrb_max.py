@@ -54,8 +54,9 @@ def main():
         get_last = last_sen.split(',')
 
         #### KEYWORD SECTION ####
-        print get_last[1]
-        print get_last[2]
+        x=0
+        for word in get_last:
+            print word[x]
         
         get_content = raw_doc.splitlines()[1:] #List form
         content_str = ''.join(get_content) #content in String format
