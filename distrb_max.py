@@ -52,12 +52,35 @@ def main():
         fir_sen = get_first_sen(raw_doc)
         last_sen = get_last_sen(raw_doc)
         get_last = last_sen.split(',')
-
+        get_length = len(get_last)
         #### KEYWORD SECTION ####
         x=0
+<<<<<<< HEAD
         for word in get_last:
             print word[x]
+=======
+        key_unigram = ''
+        key_bigram = ''
+        key_trigram = ''
+        key_fourgram = ''
+        key_unknown = ''
+>>>>>>> origin/master
         
+        while (x<get_length):
+            get_len = len(get_last[x].split())
+            if (get_len == 1):
+                key_unigram += get_last[x]+','
+            elif (get_len == 2):
+                key_bigram += get_last[x]+','
+            elif (get_len == 3):
+                key_trigram += get_last[x]+','
+            elif (get_len == 4):
+                key_fourgram += get_last[x]+','
+            else:
+                key_unknown += get_last[x]+','
+            x += 1
+        print type(key_unigram)
+            
         get_content = raw_doc.splitlines()[1:] #List form
         content_str = ''.join(get_content) #content in String format
         prettify_txt = re.sub(r'[^\w.]',' ', content_str)
@@ -122,6 +145,32 @@ def main():
         bag_of_fourNP = []
         total__tfidf = 0
         #######################
+        for k, s in enumerate(get_nouns):
+            for match in finditer(get_uni_gram, s):
+                x, y = match.span() #the match spans x to y inside the sentence s
+                ##print pos_tag[k][x:y]
+                bag_of_NP += pos_tag[k][x:y]
+        for k, s in enumerate(get_nouns):
+            for match in finditer(get_bi_gram, s):
+                x, y = match.span()
+                ##print pos_tag[k][x:y]
+                bag_of_biNP += pos_tag[k][x:y]
+        for k, s in enumerate(get_nouns):
+            for match in finditer(get_tri_gram, s):
+                x, y = match.span()
+                ##print pos_tag[k][x:y]
+                bag_of_triNP += pos_tag[k][x:y]
+        for k, s in enumerate(get_nouns):
+            for match in finditer(get_quard_gram, s):
+                x,y = match.span()
+                ##print pos_tag[k][x:y]
+                bag_of_fourNP += pos_tag[k][x:y]
+        print bag_of_NP
+        print bag_of_biNP
+        print bag_of_triNP
+        print bag_of_fourNP
+            
+        #######################          
         count += 1
         
 if __name__ == '__main__':
