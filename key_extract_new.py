@@ -300,7 +300,6 @@ def main():
     bi_tfidf_values = ''
     str_bi_grams = ''
     ###############
-    
     ##STORE BIGRAMS
     unzipped = zip(*bag_of_biNP)
     str_bigrams = list(unzipped[0])

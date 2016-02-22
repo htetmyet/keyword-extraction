@@ -1,16 +1,44 @@
 from refo import finditer, Predicate, Plus
 from collections import Counter
 
-import math, nltk, re, copy, glob
+import math, nltk, re, copy, glob, sys
+
+def term_frequency(w_tf):
+    tf_score = 1 + math.log10(w_tf)
+    return tf_score
+
+def count_total_corpus():
+    tot_corpus =  len(glob.glob1("traindata","doc*.txt"))
+    return tot_corpus
+
+def count_nterm_doc(word):
+    num_count = 0
+    get_total = count_total_corpus()
+    while (get_total>0):
+        n_files = str(get_total)
+        get_doc = open('dataset/doc'+n_files+'.txt', 'r')
+        raw_doc = get_doc.read()
+        if word in raw_doc:
+           num_count += 1
+        else:
+            num_count += 0
+        get_total -= 1
+    return num_count
+
+def inverse_df(tot_doc, num_of_x_doc):
+    idf_score = math.log10(1+(tot_doc/num_of_x_doc))
+    return idf_score
+
+def convert_to_string(text):
+    get_index = text.index(':')
+    get_length = len(text)
+    get_string = text[0:get_index]
+    return get_string
 
 def remov_stopword(text):
     stopwords = open ('nothesmartstoplist.txt', 'r').read().splitlines()
     text = ' '.join([word for word in text.split() if word not in stopwords])
     return text
-
-def count_total_corpus():
-    tot_corpus =  len(glob.glob1("traindata","doc*.txt"))
-    return tot_corpus
 
 def get_title(content):
     pre_title = content.splitlines()[0]
@@ -55,16 +83,12 @@ def main():
         get_length = len(get_last)
         #### KEYWORD SECTION ####
         x=0
-<<<<<<< HEAD
-        for word in get_last:
-            print word[x]
-=======
+
         key_unigram = ''
         key_bigram = ''
         key_trigram = ''
         key_fourgram = ''
         key_unknown = ''
->>>>>>> origin/master
         
         while (x<get_length):
             get_len = len(get_last[x].split())
@@ -79,10 +103,11 @@ def main():
             else:
                 key_unknown += get_last[x]+','
             x += 1
-        print type(key_unigram)
             
         get_content = raw_doc.splitlines()[1:] #List form
-        content_str = ''.join(get_content) #content in String format
+        after_last_sen = get_content[:-1]
+        content_str = ''.join(after_last_sen) #content in String format
+        
         prettify_txt = re.sub(r'[^\w.]',' ', content_str)
         mod_txt = remov_stopword(prettify_txt)
         token_txt = nltk.sent_tokenize(mod_txt)
@@ -143,6 +168,7 @@ def main():
         bag_of_biNP = []
         bag_of_triNP = []
         bag_of_fourNP = []
+
         total__tfidf = 0
         #######################
         for k, s in enumerate(get_nouns):
@@ -165,10 +191,60 @@ def main():
                 x,y = match.span()
                 ##print pos_tag[k][x:y]
                 bag_of_fourNP += pos_tag[k][x:y]
-        print bag_of_NP
-        print bag_of_biNP
-        print bag_of_triNP
-        print bag_of_fourNP
+
+        ##### GETTING EACH WORD TFIDF #####
+        uni_tfidf_values = ''
+        str_uni_grams = ''
+        total_docs = count_total_corpus()
+        fdist = nltk.FreqDist(bag_of_NP)
+
+        unzip_unigram = zip(*bag_of_NP)
+        str_unigrams = list(unzip_unigram[0])
+        
+        for word in fdist:
+            fq_word = fdist[word]
+            get_tf = term_frequency(fq_word)
+
+            to_string = ':'.join(word)
+            get_this_string = convert_to_string(to_string)
+
+            num_of_doc_word = count_nterm_doc(get_this_string)
+            idf_score = inverse_df(total_docs, num_of_doc_word)
+
+            tf_idf_scr = get_tf * idf_score
+            total__tfidf += tf_idf_scr
+
+            uni_tfidf_scr = repr(tf_idf_scr)+' '
+            uni_tfidf_values += uni_tfidf_scr
+            str_uni_grams += get_this_string+','
+
+        get_uni_float = [float(x) for x in uni_tfidf_values.split()]
+        get_uni_list = str_uni_grams.split(',')
+        unigram_dict = dict(zip(get_uni_list, get_uni_float))
+        
+        ##### GET TFIDF FOR UNIGRAMS & AVERAGE TFIDF VALUES #####
+        uni_avg_tfidf = (sum(map(float, get_uni_float)))/(len(get_uni_float))
+        get_zip_str = [''.join(item) for item in str_unigrams]
+        unigrams_list = zip(get_zip_str, get_uni_float)
+        #########################################################
+        
+        ##### GETTING N-GRAMS #####
+        unzip_bigram = zip(*bag_of_biNP)
+        str_bigrams = list(unzip_bigram[0])
+        get_bigrams = zip(str_bigrams, str_bigrams[1:])[::2]
+
+        unzip_trigram = zip(*bag_of_triNP)
+        str_trigrams = list(unzip_trigram[0])
+        get_trigrams = zip(str_trigrams, str_trigrams[1:], str_trigrams[2:])[::3]
+
+        unzip_fourgram = zip(*bag_of_fourNP)
+        str_fourgrams = list(unzip_fourgram[0])
+        get_fourgrams = zip(str_fourgrams, str_fourgrams[1:], str_fourgrams[2:], str_fourgrams[3:])[::4]
+        ############################
+
+        ##print get_bigrams
+        ##print get_trigrams
+        ##print get_fourgrams
             
         #######################          
         count += 1
