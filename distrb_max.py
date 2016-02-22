@@ -116,7 +116,7 @@ def main():
         pos_tag = [nltk.pos_tag(sent) for sent in token_word]
 
         print title
-        print '\n'
+        
         ##Chunking and printing  NP##
         get_nouns = [[Word(*x) for x in sent] for sent in pos_tag]
         ##NNP Rules##
@@ -221,7 +221,7 @@ def main():
         get_uni_float = [float(x) for x in uni_tfidf_values.split()]
         get_uni_list = str_uni_grams.split(',')
         unigram_dict = dict(zip(get_uni_list, get_uni_float))
-        
+        print unigram_dict
         ##### GET TFIDF FOR UNIGRAMS & AVERAGE TFIDF VALUES #####
         uni_avg_tfidf = (sum(map(float, get_uni_float)))/(len(get_uni_float))
         get_zip_str = [''.join(item) for item in str_unigrams]
