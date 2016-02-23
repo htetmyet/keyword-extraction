@@ -8,4 +8,4 @@ Mr. Zuckerberg and Dr. Chan have recently made visible investments and gifts in 
 In May, AltSchool, a private school start-up in San Francisco that develops personalized learning technologies, announced that it had raised $100 million from a group of investors, including a donor-advised fund financed by the Zuckerbergs at the Silicon Valley Community Foundation. 
 In September, Facebook announced that it was working with Summit Public Schools, a charter school network, to develop an on online platform to help tailor education to the needs and interests of individual students. 
 And in November, EducationSuperhighway, a nonprofit group that helps K-12 schools tap federal funds for high-speed classroom Internet connections, announced that the couple had agreed to donate $20 million to its work. 
-Mark Zuckerberg,the Chan Zuckerberg Initiative,Silicon Vally Community Foundation,Facebook,Dr. Priscilla Chan,AltSchool,a private school,Summit Public Schools,nonprofit group 
+Mark Zuckerberg,the Chan Zuckerberg Initiative,Silicon Vally Community Foundation,Facebook,Dr. Priscilla Chan,AltSchool,a private school,Summit Public Schools,nonprofit group,the Microsoft,Bill Gates
