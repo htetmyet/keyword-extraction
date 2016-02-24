@@ -1,7 +1,7 @@
 from refo import finditer, Predicate, Plus
 from collections import Counter
 
-import math, nltk, re, copy, glob, sys
+import math, nltk, re, copy, glob, sys, numpy as np
 
 def get_val_bipairs(bi_dict, bigrams):
     val_pairs = [(bi_dict[x]+bi_dict[y]) for x,y in bigrams]
@@ -80,7 +80,7 @@ class W(Predicate):
 
 def chk_keyword (word, n_grams):
     result = 0
-    if (word in s for s in n_grams):
+    if word in n_grams:
         result = 1
     else:
         result = 0
@@ -105,10 +105,49 @@ def involve_in_title(word, get_title):
         result_this = 0
     return result_this
 
+def dist_initial(n_grams, total_num):
+    get_key = 0
+    get_nkey = 0
+
+    try:
+        
+        ##KEYWORDS
+        for item in n_grams:
+            if item[5] == 1:
+                get_key += 1
+            else:
+                get_key += 0
+    
+        ##perc_key = (get_key/total_num)*100
+        key_str = str(get_key)
+        key_float = (float(key_str)/total_num)*10
+        this_key = str(key_float)
+        ##NON KEYWORDS
+        for item in n_grams:
+            if item[5] == 0:
+                get_nkey += 1
+            else:
+                get_nkey += 0
+        ##perc_nkey = (get_nkey/total_num)*100
+        nkey_str = str(get_nkey)
+        nkey_float = (float(nkey_str)/total_num)*10
+        this_nkey = str(nkey_float)
+    except:
+        print "error"
+    
+    ini_state = np.matrix('"'+this_key+' '+this_nkey+'"')
+    return ini_state
+
 def main():
     get_total = count_total_corpus()
     count = 0
     f_name = str(count+1)
+    
+    uni_collection = []
+    bi_collection = []
+    tri_collection = []
+    four_collection = []
+    
     while (count < get_total):
         n_files = str(count+1)
         get_doc = open('traindata/doc'+n_files+'.txt', 'r')
@@ -143,9 +182,9 @@ def main():
             else:
                 key_unknown += get_last[x]+','
             x += 1
+            
         ### GET IN LIST ###
         key_unis = key_unigram.split(',')
-        print type(key_unis)
         key_bis = key_bigram.split(',')
         key_tris = key_trigram.split(',')
         key_fours = key_fourgram.split(',')
@@ -163,7 +202,6 @@ def main():
         token_word = [nltk.word_tokenize(sent) for sent in token_txt]
         pos_tag = [nltk.pos_tag(sent) for sent in token_word]
 
-        print title
         ##print key_unigram, key_bigram, key_trigram, key_fourgram, key_unknown
         
         ##Chunking and printing  NP##
@@ -314,7 +352,7 @@ def main():
                 key_uni_matx.append(1)
             else:
                 key_uni_matx.append(0)
-        print key_uni_matx                
+        zip_uni_all_feat = zip(get_zip_str, get_uni_float, uni_feat_tfidf, uni_fir_sen, uni_title_feat, key_uni_matx)
         #########################################################
         
         ##### GETTING BIGRAMS #####
@@ -396,7 +434,16 @@ def main():
             else:
                 feat_invol_tit.append(0)
         invol_tit_feat = zip (get_zip_str, get_bi_floats, feat_tfidf_matx, feat_fir_sen, feat_invol_tit)
-        
+        ##### KEYWORD OR NOT #####
+        key_bi_matx = []
+        for x in bigrams_list:
+            get_res = chk_keyword(x[0],key_bis)
+            if get_res == 1:
+                key_bi_matx.append(1)
+            else:
+                key_bi_matx.append(0)
+        zip_bi_all_feat = zip(get_zip_str, get_bi_floats, feat_tfidf_matx, feat_fir_sen, feat_invol_tit, key_bi_matx)
+        #####################################
         ##### GETTING TRIGRAMS #####
         #Term Frequency for trigrams
         total__tfidf = 0
@@ -476,7 +523,17 @@ def main():
             else:
                 tri_invol_tit.append(0)
         tri_tit_feat = zip (get_ziptri_str, get_tri_floats, tri_tfidf_matx, tri_fir_sen, tri_invol_tit)
-
+        ##################################################
+        ##### KEYWORD OR NOT #####
+        key_tri_matx = []
+        for x in trigrams_list:
+            get_res = chk_keyword(x[0],key_tris)
+            if get_res == 1:
+                key_tri_matx.append(1)
+            else:
+                key_tri_matx.append(0)
+        zip_tri_all_feat = zip(get_ziptri_str, get_tri_float, tri_tfidf_matx, tri_fir_sen, tri_invol_tit, key_tri_matx)
+        #########################################################
         ##### GETTING 4-GRAMS #####
         #Term Frequency for 4-grams
         total__tfidf = 0
@@ -557,13 +614,42 @@ def main():
             else:
                 four_invol_tit.append(0)
         four_tit_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit)
-        print four_tit_feat
+        ##### KEYWORD OR NOT #####
+        key_four_matx = []
+        for x in fourgrams_list:
+            get_res = chk_keyword(x[0],key_fours)
+            if get_res == 1:
+                key_four_matx.append(1)
+            else:
+                key_four_matx.append(0)
+        zip_four_all_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit, key_four_matx)
+        #########################################################
         ##print get_bigrams
         ##print get_trigrams
         ##print get_fourgrams
-            
-        #######################          
+        uni_collection +=  zip_uni_all_feat
+        bi_collection += zip_bi_all_feat
+        tri_collection += zip_tri_all_feat
+        four_collection += zip_four_all_feat
+        #######################
+        print "Document "+n_files+" has been processed."
         count += 1
+
+    ##### GET INITIAL STATES FORA N-GRAMS #####
+    print '########## INITIAL STATES FOR N-GRAMS #########'
+    total_unigram = len(uni_collection) ##UNIGRAM
+    print dist_initial(uni_collection,total_unigram)
+    
+    total_bigram = len(bi_collection) ##BIGRAM
+    print dist_initial(bi_collection,total_bigram)
+    
+    total_trigram = len(tri_collection) ##TRIGRAM
+    print dist_initial(tri_collection,total_trigram)
+    
+    total_fourgram = len(four_collection) ##FOURGRAM
+    print dist_initial(four_collection,total_fourgram)
+    ############################################
+    
         
 if __name__ == '__main__':
     main()
