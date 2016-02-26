@@ -120,7 +120,7 @@ def dist_initial(n_grams, total_num):
     
         ##perc_key = (get_key/total_num)*100
         key_str = str(get_key)
-        key_float = (float(key_str)/total_num)*10
+        key_float = (float(key_str)/total_num)*1
         this_key = str(key_float)
         ##NON KEYWORDS
         for item in n_grams:
@@ -130,13 +130,192 @@ def dist_initial(n_grams, total_num):
                 get_nkey += 0
         ##perc_nkey = (get_nkey/total_num)*100
         nkey_str = str(get_nkey)
-        nkey_float = (float(nkey_str)/total_num)*10
+        nkey_float = (float(nkey_str)/total_num)*1
         this_nkey = str(nkey_float)
     except:
         print "error"
     
     ini_state = np.matrix('"'+this_key+' '+this_nkey+'"')
     return ini_state
+
+def dist_tfidf (n_grams):
+    get_kk = 0
+    get_knk = 0
+    get_nkk = 0
+    get_nknk = 0
+    total_num = 0
+    total_num2 = 0
+    
+    for item in n_grams:
+        if (item[2] == 1 and item[5] == 1) or (item[2] == 1 and item[5] == 0):
+            total_num += 1
+    total_str = str(total_num)
+    
+    for item in n_grams:
+        if (item[2] == 1 and item[5] ==1):
+            get_kk += 1
+    kk_str = str(get_kk)
+    kk_float = (float(kk_str)/float(total_str))*1
+    this_kk = str(kk_float)
+    
+    for item in n_grams:
+        if (item[2] == 1 and item[5] == 0):
+            get_knk += 1
+    knk_str = str(get_knk)
+    knk_float = (float(knk_str)/float(total_str))*1
+    this_knk = str(knk_float)
+
+    for item in n_grams:
+        if (item[2] == 0 and item[5] == 1) or (item[2] == 0 and item[5] == 0):
+            total_num2 += 1
+        total_str2 = str(total_num2)
+
+    for item in n_grams:
+        if (item[2] == 0 and item[5] == 1):
+            get_nkk += 1
+    nkk_str = str(get_nkk)
+    nkk_float = (float(nkk_str)/float(total_str2))*1
+    this_nkk = str(nkk_float)
+
+    for item in n_grams:
+        if (item[2] == 0 and item[5] == 0):
+            get_nknk += 1
+    nknk_str = str(get_nknk)
+    nknk_float = (float(nknk_str)/float(total_str2))*1
+    this_nknk = str(nknk_float)
+    
+    tfidf_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
+    return tfidf_matx
+
+def dist_firsen (n_grams):
+    get_kk = 0
+    get_knk = 0
+    get_nkk = 0
+    get_nknk = 0
+    total_num = 0
+    total_num2 = 0
+    
+    for item in n_grams:
+        if (item[3] == 1 and item[5] == 1) or (item[3] == 1 and item[5] == 0):
+            total_num += 1
+    total_str = str(total_num)
+    
+    for item in n_grams:
+        if (item[3] == 1 and item[5] ==1):
+            get_kk += 1
+    kk_str = str(get_kk)
+    try:
+        kk_float = (float(kk_str)/float(total_str))*1
+        this_kk = str(kk_float)
+    except ZeroDivisionError:
+        this_kk = str(0)
+    if (this_kk == str(0)):
+        this_kk = str(0.5)
+        
+    for item in n_grams:
+        if (item[3] == 1 and item[5] == 0):
+            get_knk += 1
+    knk_str = str(get_knk)
+    try:
+        knk_float = (float(knk_str)/float(total_str))*1
+        this_knk = str(knk_float)
+    except ZeroDivisionError:
+        this_knk = str(0)
+    if (this_knk == str(0)):
+        this_knk = str(0.5)
+        
+    for item in n_grams:
+        if (item[3] == 0 and item[5] == 1) or (item[3] == 0 and item[5] == 0):
+            total_num2 += 1
+        total_str2 = str(total_num2)
+
+    for item in n_grams:
+        if (item[3] == 0 and item[5] == 1):
+            get_nkk += 1
+    nkk_str = str(get_nkk)
+    try:
+        nkk_float = (float(nkk_str)/float(total_str2))*1
+        this_nkk = str(nkk_float)
+    except ZeroDivisionError:
+        this_nkk = str(0)
+        
+    for item in n_grams:
+        if (item[3] == 0 and item[5] == 0):
+            get_nknk += 1
+    nknk_str = str(get_nknk)
+    try:
+        nknk_float = (float(nknk_str)/float(total_str2))*1
+        this_nknk = str(nknk_float)
+    except ZeroDivisionError:
+        this_nknk = str(0)
+    
+    firsen_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
+    return firsen_matx
+
+def dist_title(n_grams):
+    get_kk = 0
+    get_knk = 0
+    get_nkk = 0
+    get_nknk = 0
+    total_num = 0
+    total_num2 = 0
+    
+    for item in n_grams:
+        if (item[4] == 1 and item[5] == 1) or (item[4] == 1 and item[5] == 0):
+            total_num += 1
+    total_str = str(total_num)
+    
+    for item in n_grams:
+        if (item[4] == 1 and item[5] ==1):
+            get_kk += 1
+    kk_str = str(get_kk)
+    try:
+        kk_float = (float(kk_str)/float(total_str))*1
+        this_kk = str(kk_float)
+    except ZeroDivisionError:
+        this_kk = str(0)
+    if (this_kk == str(0)):
+        this_kk = str(0.5)
+        
+    for item in n_grams:
+        if (item[4] == 1 and item[5] == 0):
+            get_knk += 1
+    knk_str = str(get_knk)
+    try:
+        knk_float = (float(knk_str)/float(total_str))*1
+        this_knk = str(knk_float)
+    except ZeroDivisionError:
+        this_knk = str(0)
+    if (this_knk == str(0)):
+        this_knk=str(0.5)
+        
+    for item in n_grams:
+        if (item[4] == 0 and item[5] == 1) or (item[4] == 0 and item[5] == 0):
+            total_num2 += 1
+        total_str2 = str(total_num2)
+
+    for item in n_grams:
+        if (item[4] == 0 and item[5] == 1):
+            get_nkk += 1
+    nkk_str = str(get_nkk)
+    try:
+        nkk_float = (float(nkk_str)/float(total_str2))*1
+        this_nkk = str(nkk_float)
+    except ZeroDivisionError:
+        this_nkk = str(0)
+        
+    for item in n_grams:
+        if (item[4] == 0 and item[5] == 0):
+            get_nknk += 1
+    nknk_str = str(get_nknk)
+    try:
+        nknk_float = (float(nknk_str)/float(total_str2))*1
+        this_nknk = str(nknk_float)
+    except ZeroDivisionError:
+        this_nknk = str(0)
+        
+    title_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
+    return title_matx
 
 def main():
     get_total = count_total_corpus()
@@ -536,120 +715,139 @@ def main():
         #########################################################
         ##### GETTING 4-GRAMS #####
         #Term Frequency for 4-grams
-        total__tfidf = 0
-        four_tfidf_values = ''
-        str_four_grams = ''
-        ###############
-        unzip_fourgram = zip(*bag_of_fourNP)
-        str_fourgrams = list(unzip_fourgram[0])
-        get_fourgrams = zip(str_fourgrams, str_fourgrams[1:], str_fourgrams[2:], str_fourgrams[3:])[::4]
-        ############################
-        f_dist = nltk.FreqDist(bag_of_fourNP)
-
-        for word in f_dist:
-            fr_fq = f_dist[word]
-            get_tf = term_frequency(fr_fq)
-
-            ### FEATURES ###
-            ##Tuple to String##
-            to_string = ':'.join(word)
-            get_this_string = convert_to_string(to_string)
-            ##DF Score
-            num_of_doc_word = count_nterm_doc(get_this_string)
-            ##
-            ##TF.IDF Score
-            idf_score = inverse_df(total_docs, num_of_doc_word)
-            tf_idf_scr = get_tf * idf_score
-            total__tfidf += tf_idf_scr
-
-            ##GET EACH FOURGRAMS TFIDF
-            get_tfidf_scr = repr(tf_idf_scr)+' '
-            four_tfidf_values += get_tfidf_scr
-            str_four_grams += get_this_string+','
-
-        ##BUILD DICT FOR EACH TERMS
-        get_four_float = [float(x) for x in four_tfidf_values.split()]
-        get_four_list = str_four_grams.split(',')
-        fourgram_dict = dict(zip(get_four_list, get_four_float))
-        ###########################
-
-        ##GET TFIDF FOR 4-GRAMS##
-        get_four_floats = get_val_fpairs(fourgram_dict, get_fourgrams)
-        get_four_zip = dict(zip(get_fourgrams, get_four_floats))
-        ############
-        four_avg_tfidf = (sum(map(float,get_four_floats)))/(len(get_four_floats))
-        ###########################
-        get_zipfour_str = [' '.join(item) for item in get_fourgrams]
-        ###Bigrams string with TFIDF###
-        fourgrams_list =  zip(get_zipfour_str, get_four_floats)
-        ###########################
-        ##### TFIDF FEATURE MATRIX #####
-        four_tfidf_matx = []
-        for x in fourgrams_list:
-            if float(x[1]) > four_avg_tfidf:
-               four_tfidf_matx.append(1)
-            else:
-                four_tfidf_matx.append(0)
+        if (len(bag_of_fourNP)>0):
             
-        four_tfidf_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx)
-        #################################
-        #### FIRST SENTENCE FEATURE ####
-        four_fir_sen = []
-        for x in four_tfidf_feat:
-            file_name = 'traindata/doc'+f_name+'.txt'
-            get_res = chk_frs_sen(x[0], file_name)
-            if get_res == 1:
-                four_fir_sen.append(1)
-            else:
-                four_fir_sen.append(0)
+            total__tfidf = 0
+            four_tfidf_values = ''
+            str_four_grams = ''
+            ###############
+            unzip_fourgram = zip(*bag_of_fourNP)
+            str_fourgrams = list(unzip_fourgram[0])
+            get_fourgrams = zip(str_fourgrams, str_fourgrams[1:], str_fourgrams[2:], str_fourgrams[3:])[::4]
+            ############################
+            f_dist = nltk.FreqDist(bag_of_fourNP)
+
+            for word in f_dist:
+                fr_fq = f_dist[word]
+                get_tf = term_frequency(fr_fq)
+
+                ### FEATURES ###
+                ##Tuple to String##
+                to_string = ':'.join(word)
+                get_this_string = convert_to_string(to_string)
+                ##DF Score
+                num_of_doc_word = count_nterm_doc(get_this_string)
+                ##TF.IDF Score
+                idf_score = inverse_df(total_docs, num_of_doc_word)
+                tf_idf_scr = get_tf * idf_score
+                total__tfidf += tf_idf_scr
+
+                ##GET EACH FOURGRAMS TFIDF
+                get_tfidf_scr = repr(tf_idf_scr)+' '
+                four_tfidf_values += get_tfidf_scr
+                str_four_grams += get_this_string+','
+
+            ##BUILD DICT FOR EACH TERMS
+            get_four_float = [float(x) for x in four_tfidf_values.split()]
+            get_four_list = str_four_grams.split(',')
+            fourgram_dict = dict(zip(get_four_list, get_four_float))
+            ###########################
+
+            ##GET TFIDF FOR 4-GRAMS##
+            get_four_floats = get_val_fpairs(fourgram_dict, get_fourgrams)
+            get_four_zip = dict(zip(get_fourgrams, get_four_floats))
+            ############
+            four_avg_tfidf = (sum(map(float,get_four_floats)))/(len(get_four_floats))
+            ###########################
+            get_zipfour_str = [' '.join(item) for item in get_fourgrams]
+            ###Bigrams string with TFIDF###
+            fourgrams_list =  zip(get_zipfour_str, get_four_floats)
+            ###########################
+            ##### TFIDF FEATURE MATRIX #####
+            four_tfidf_matx = []
+            for x in fourgrams_list:
+                if float(x[1]) > four_avg_tfidf:
+                   four_tfidf_matx.append(1)
+                else:
+                    four_tfidf_matx.append(0)
             
-        four_sen_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen)
-        #################################
-        #### INVOLVE IN TITLE FEATURE ###
-        four_invol_tit = []
-        for x in tri_sen_feat:
-            get_res = involve_in_title(x[0], title)
-            if get_res == 1:
-                four_invol_tit.append(1)
-            else:
-                four_invol_tit.append(0)
-        four_tit_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit)
-        ##### KEYWORD OR NOT #####
-        key_four_matx = []
-        for x in fourgrams_list:
-            get_res = chk_keyword(x[0],key_fours)
-            if get_res == 1:
-                key_four_matx.append(1)
-            else:
-                key_four_matx.append(0)
-        zip_four_all_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit, key_four_matx)
-        #########################################################
-        ##print get_bigrams
-        ##print get_trigrams
-        ##print get_fourgrams
+            four_tfidf_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx)
+            #################################
+            #### FIRST SENTENCE FEATURE ####
+            four_fir_sen = []
+            for x in four_tfidf_feat:
+                file_name = 'traindata/doc'+f_name+'.txt'
+                get_res = chk_frs_sen(x[0], file_name)
+                if get_res == 1:
+                    four_fir_sen.append(1)
+                else:
+                    four_fir_sen.append(0)
+            
+            four_sen_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen)
+            #################################
+            #### INVOLVE IN TITLE FEATURE ###
+            four_invol_tit = []
+            for x in tri_sen_feat:
+                get_res = involve_in_title(x[0], title)
+                if get_res == 1:
+                    four_invol_tit.append(1)
+                else:
+                    four_invol_tit.append(0)
+            four_tit_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit)
+            ##### KEYWORD OR NOT #####
+            key_four_matx = []
+            for x in fourgrams_list:
+                get_res = chk_keyword(x[0],key_fours)
+                if get_res == 1:
+                    key_four_matx.append(1)
+                else:
+                    key_four_matx.append(0)
+            zip_four_all_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit, key_four_matx)
+            #########################################################
+        else:
+            print 'Pass4-gram'
+        
         uni_collection +=  zip_uni_all_feat
         bi_collection += zip_bi_all_feat
         tri_collection += zip_tri_all_feat
         four_collection += zip_four_all_feat
+
+        total_unigram = len(uni_collection) ##UNIGRAM
+        total_bigram = len(bi_collection) ##BIGRAM
+        total_trigram = len(tri_collection) ##TRIGRAM
+        total_fourgram = len(four_collection) ##FOURGRAM
         #######################
         print "Document "+n_files+" has been processed."
         count += 1
 
     ##### GET INITIAL STATES FORA N-GRAMS #####
+    ### MAKE TEXT FOR EVERY THING ###
     print '########## INITIAL STATES FOR N-GRAMS #########'
-    total_unigram = len(uni_collection) ##UNIGRAM
     print dist_initial(uni_collection,total_unigram)
-    
-    total_bigram = len(bi_collection) ##BIGRAM
     print dist_initial(bi_collection,total_bigram)
-    
-    total_trigram = len(tri_collection) ##TRIGRAM
     print dist_initial(tri_collection,total_trigram)
-    
-    total_fourgram = len(four_collection) ##FOURGRAM
     print dist_initial(four_collection,total_fourgram)
     ############################################
-    
-        
+    ##### GET TFIDF DISTRIBUTIONS #####
+    print '########## TFIDF DISTRIBUTIONS FOR N-GRAMS ##########'
+    print dist_tfidf(uni_collection)
+    print dist_tfidf(bi_collection)
+    print dist_tfidf(tri_collection)
+    print dist_tfidf(four_collection)
+    ###################################
+    ##### GET FIRST SENTENCE DISTRIBUTIONS #####
+    print '########## FIRST SEN. DISTRIBUTIONS FOR N-GRAMS ##########'
+    print dist_firsen(uni_collection)
+    print dist_firsen(bi_collection)
+    print dist_firsen(tri_collection)
+    print dist_firsen(four_collection)
+    ############################################
+    ##### GET TITLE DISTRIBUTIONS #####
+    print '########## TITLE DISTRIBUTIONS FOR N-GRAMS ##########'
+    print dist_title(uni_collection)
+    print dist_title(bi_collection)
+    print dist_title(tri_collection)
+    print dist_title(four_collection)
+    ###################################
 if __name__ == '__main__':
     main()
