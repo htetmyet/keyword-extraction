@@ -1,5 +1,5 @@
 a
-A
+This
 a's
 able
 about
@@ -444,6 +444,9 @@ therefore
 therein
 theres
 thereupon
+These
+Those
+That
 these
 they
 they'd

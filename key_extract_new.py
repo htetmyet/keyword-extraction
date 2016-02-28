@@ -210,7 +210,7 @@ def main():
     ##STORE UNIGRAMS
     unzipped_uni = zip(*bag_of_NP)
     str_unigrams = list(unzipped_uni[0])
-    ##get_unigrams = zip(str_unigrams,str_unigrams[1:])[::2]
+    get_unigrams = zip(str_unigrams,str_unigrams[1:])[::1]
     ###############
     for word in fdist:
         fq_word = fdist[word]
@@ -238,7 +238,7 @@ def main():
     ##BUILD DICT FOR EACH TERMS
     get_uni_float = [float(x) for x in uni_tfidf_values.split()]
     get_uni_list = str_uni_grams.split(',')
-    unigram_dict = dict(zip(get_uni_list, get_uni_float))
+    unigram_dict = dict(zip(get_unigrams, get_uni_float))
     ###########################  
 
     ##GET TFIDF FOR UNIGRAMS##
@@ -505,92 +505,98 @@ def main():
     four_tfidf_values = ''
     str_four_grams = ''
     ###############
-    
-    ##STORE 4-GRAMS
-    unzipped_four = zip(*bag_of_fourNP)
-    str_fourgrams = list(unzipped_four[0])
-    get_fourgrams = zip(str_fourgrams,str_fourgrams[1:],str_fourgrams[2:],str_fourgrams[3:])[::4]
-    ###############
-    
-    #Term Frequency for 4-grams
-    total__tfidf = 0
-    print "\n4-grams Feature Matrices:"
-    f_dist = nltk.FreqDist(bag_of_fourNP)
-    for word in f_dist:
-        fr_fq = f_dist[word]
-        ##print '%s-->%d' % (word, fr_fq)
-        get_tf = term_frequency(fr_fq)
+    if (len(bag_of_fourNP)>0):
+        
+        ##STORE 4-GRAMS
+        unzipped_four = zip(*bag_of_fourNP)
+        str_fourgrams = list(unzipped_four[0])
+        get_fourgrams = zip(str_fourgrams,str_fourgrams[1:],str_fourgrams[2:],str_fourgrams[3:])[::4]
+        ###############
 
-        ### FEATURES ###
-        ##Tuple to String##
-        to_string = ':'.join(word)
-        get_this_string = convert_to_string(to_string)
-        ##DF Score
-        num_of_doc_word = count_nterm_doc(get_this_string)
-        ##
-        ##TF.IDF Score
-        idf_score = inverse_df(total_docs, num_of_doc_word)
-        tf_idf_scr = get_tf * idf_score
-        total__tfidf += tf_idf_scr
+        
+        #Term Frequency for 4-grams
+        total__tfidf = 0
+        print "\n4-grams Feature Matrices:"
+        f_dist = nltk.FreqDist(bag_of_fourNP)
+        for word in f_dist:
+            fr_fq = f_dist[word]
+            ##print '%s-->%d' % (word, fr_fq)
+            get_tf = term_frequency(fr_fq)
 
-        ##GET EACH FOURGRAMS TFIDF
-        get_tfidf_scr = repr(tf_idf_scr)+' '
-        four_tfidf_values += get_tfidf_scr
-        str_four_grams += get_this_string+','
+            ### FEATURES ###
+            ##Tuple to String##
+            to_string = ':'.join(word)
+            get_this_string = convert_to_string(to_string)
+            ##DF Score
+            num_of_doc_word = count_nterm_doc(get_this_string)
+            ##
+            ##TF.IDF Score
+            idf_score = inverse_df(total_docs, num_of_doc_word)
+            tf_idf_scr = get_tf * idf_score
+            total__tfidf += tf_idf_scr
 
-    ##BUILD DICT FOR EACH TERMS
-    get_four_float = [float(x) for x in four_tfidf_values.split()]
-    get_four_list = str_four_grams.split(',')
-    fourgram_dict = dict(zip(get_four_list, get_four_float))
-    ###########################
+            ##GET EACH FOURGRAMS TFIDF
+            get_tfidf_scr = repr(tf_idf_scr)+' '
+            four_tfidf_values += get_tfidf_scr
+            str_four_grams += get_this_string+','
 
-    ##GET TFIDF FOR 4-GRAMS##
-    get_four_floats = get_val_fpairs(fourgram_dict, get_fourgrams)
-    get_four_zip = dict(zip(get_fourgrams, get_four_floats))
-    ############
-    four_avg_tfidf = (sum(map(float,get_four_floats)))/(len(get_four_floats))
-    ###########################
-    get_zipfour_str = [' '.join(item) for item in get_fourgrams]
-    ###Bigrams string with TFIDF###
-    fourgrams_list =  zip(get_zipfour_str, get_four_floats)
-    ###########################
-    print '===============***==============='
-    print 'Total 4-grams: ', len(get_four_floats)
-    print 'Total tfidf', sum(map(float,get_four_floats))
-    print 'Average TF.IDF: ', four_avg_tfidf
-    print '===============***==============='
-    ##### TFIDF FEATURE MATRIX #####
-    four_tfidf_matx = []
-    for x in fourgrams_list:
-        if float(x[1]) > four_avg_tfidf:
-            four_tfidf_matx.append(1)
-        else:
-            four_tfidf_matx.append(0)
+        ##BUILD DICT FOR EACH TERMS
+        get_four_float = [float(x) for x in four_tfidf_values.split()]
+        get_four_list = str_four_grams.split(',')
+        fourgram_dict = dict(zip(get_four_list, get_four_float))
+        ###########################
+
+        ##GET TFIDF FOR 4-GRAMS##
+        get_four_floats = get_val_fpairs(fourgram_dict, get_fourgrams)
+        get_four_zip = dict(zip(get_fourgrams, get_four_floats))
+        ############
+        four_avg_tfidf = (sum(map(float,get_four_floats)))/(len(get_four_floats))
+        ###########################
+        get_zipfour_str = [' '.join(item) for item in get_fourgrams]
+        ###Bigrams string with TFIDF###
+        fourgrams_list =  zip(get_zipfour_str, get_four_floats)
+        ###########################
+        print '===============***==============='
+        print 'Total 4-grams: ', len(get_four_floats)
+        print 'Total tfidf', sum(map(float,get_four_floats))
+        print 'Average TF.IDF: ', four_avg_tfidf
+        print '===============***==============='
+        ##### TFIDF FEATURE MATRIX #####
+        four_tfidf_matx = []
+        for x in fourgrams_list:
+            if float(x[1]) > four_avg_tfidf:
+                four_tfidf_matx.append(1)
+            else:
+                four_tfidf_matx.append(0)
             
-    four_tfidf_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx)
-    #################################
-    #### FIRST SENTENCE FEATURE ####
-    four_fir_sen = []
-    for x in four_tfidf_feat:
-        get_res = chk_frs_sen(x[0], file_name)
-        if get_res == 1:
-            four_fir_sen.append(1)
-        else:
-            four_fir_sen.append(0)
+        four_tfidf_feat = zip(get_zipfour_str, get_four_floats, four_tfidf_matx)
+        #################################
+        #### FIRST SENTENCE FEATURE ####
+        four_fir_sen = []
+        for x in four_tfidf_feat:
+            get_res = chk_frs_sen(x[0], file_name)
+            if get_res == 1:
+                four_fir_sen.append(1)
+            else:
+                four_fir_sen.append(0)
             
-    four_sen_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen)
-    #################################
-    #### INVOLVE IN TITLE FEATURE ###
-    four_invol_tit = []
-    for x in tri_sen_feat:
-        get_res = involve_in_title(x[0], title)
-        if get_res == 1:
-            four_invol_tit.append(1)
-        else:
-            four_invol_tit.append(0)
-    four_tit_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit)
-    print four_tit_feat
-    #################################
+        four_sen_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen)
+        #################################
+        #### INVOLVE IN TITLE FEATURE ###
+        four_invol_tit = []
+        for x in tri_sen_feat:
+            get_res = involve_in_title(x[0], title)
+            if get_res == 1:
+                four_invol_tit.append(1)
+            else:
+                four_invol_tit.append(0)
+        four_tit_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit)
+        print four_tit_feat
+        #################################
+
+    else:
+        print 'Zero Fourgram'
+
 if __name__ == '__main__':
     main()
 

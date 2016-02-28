@@ -1,0 +1,18 @@
+WordPress Sites Now Support Google¡¯s AMP To Make Mobile Pages Load Much Faster
+Google has some big plans when it comes to making the web faster on your mobile phone. The company just added AMP-enabled pages in its mobile search results. And one of the first companies supporting the new Instant Article-like format is an important one ? Automattic, the company behind WordPress.com. 
+
+AMP (also known as Accelerated Mobile Page) is an open-source project that borrows some ideas from Facebook¡¯s Instant Articles and brings them to the open web. An AMP-enabled page loads four times faster, and it could be useful when you are in the middle of nowhere with a bad cell reception. 
+
+The WordPress team has followed the project and worked on its own implementation of AMP. Starting today, any website on WordPress.com now automatically supports AMP. There¡¯s nothing to do. Self-hosted WordPress websites can also enable AMP by installing a plugin. 
+
+And finally, WordPress.com VIP customers, such as Quartz, FiveThirtyEight, Fortune and TechCrunch can enable support for AMP. This last part is key as AMP is mostly targeted toward news articles for now. Whenever you search for a news story on Google, there is now a carousel of AMP-enabled stories (it¡¯s going to be important to see whether non-AMP stories get retrograded following this change). Nuzzel¡¯s app also serves AMP-enabled pages when it can. TechCrunch will soon support AMP. 
+
+So how does it look? If you¡¯re on an AMP-powered WordPress site, you can add ¡°/amp/¡± at the end of the URL and get the optimized version. Here¡¯s an example on Longreads¡¯ blog. It¡¯s a stripped-down version of the normal post. 
+
+And you don¡¯t lose much as AMP markup supports a wide range of features. For instance, AMP has worked with ad networks, such as Outbrain, AOL, OpenX, DoubleClick and AdSense, to create optimized tags for mobile pages. So you can still put ad tags in your AMP-enabled pages. Similarly, you can add analytics tools. But these JavaScript calls will be optimized. 
+
+For self-hosted WordPress sites, there are various hooks in the code to customize your AMP template. The company is still working on an easier customizing interface for WordPress.com sites. 
+
+As for all the things that usually slow down web pages today, such as embeds, JavaScript-heavy content or Flash, WordPress strips out this content from the AMP pages. Comments are also omitted by default. 
+
+WordPress adding AMP support is a big deal as 25 percent of the web runs on WordPress. The AMP project is off to a good start with WordPress¡¯s backing. All WordPress sites are now potentially AMP-enabled. 
