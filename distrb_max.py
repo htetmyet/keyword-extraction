@@ -1,7 +1,7 @@
 from refo import finditer, Predicate, Plus
 from collections import Counter
 
-import math, nltk, re, copy, glob, sys, numpy as np, os
+import math, nltk, re, copy, glob, sys, numpy as np
 
 def get_val_bipairs(bi_dict, bigrams):
     val_pairs = [(bi_dict[x]+bi_dict[y]) for x,y in bigrams]
@@ -48,7 +48,7 @@ def convert_to_string(text):
     return get_string
 
 def remov_stopword(text):
-    stopwords = open ('smartstoplist.txt', 'r').read().splitlines()
+    stopwords = open ('nothesmartstoplist.txt', 'r').read().splitlines()
     text = ' '.join([word for word in text.split() if word not in stopwords])
     return text
 
@@ -105,251 +105,218 @@ def involve_in_title(word, get_title):
         result_this = 0
     return result_this
 
-def cal_bayes(n_grams):## DISTRIBUTING LIKELIHOOD
-    prior_k = 0
-    prior_nk = 0
-    prior_tf = 0
-    prior_ntf = 0
-    prior_tit = 0
-    prior_ntit = 0
-    prior_fs = 0
-    prior_nfs = 0
+def dist_initial(n_grams, total_num):
+    get_key = 0
+    get_nkey = 0
 
-    total_key = 0
-    total_nkey = 0
-    tfk = 0
-    tfnk = 0
-    ntfk = 0
-    ntfnk = 0
-    fsk = 0
-    fsnk = 0
-    nfsk = 0
-    nfsnk = 0
-    titk = 0
-    titnk = 0
-    ntitk = 0
-    ntitnk = 0
+    try:
+        
+        ##KEYWORDS
+        for item in n_grams:
+            if item[5] == 1:
+                get_key += 1
+            else:
+                get_key += 0
+    
+        ##perc_key = (get_key/total_num)*100
+        key_str = str(get_key)
+        key_float = (float(key_str)/total_num)*1
+        this_key = str(key_float)
+        ##NON KEYWORDS
+        for item in n_grams:
+            if item[5] == 0:
+                get_nkey += 1
+            else:
+                get_nkey += 0
+        ##perc_nkey = (get_nkey/total_num)*100
+        nkey_str = str(get_nkey)
+        nkey_float = (float(nkey_str)/total_num)*1
+        this_nkey = str(nkey_float)
+    except:
+        print "error"
+    
+    ini_state = np.matrix('"'+this_key+' '+this_nkey+'"')
+    return ini_state
+
+def dist_tfidf (n_grams):
+    get_kk = 0
+    get_knk = 0
+    get_nkk = 0
+    get_nknk = 0
+    total_num = 0
+    total_num2 = 0
     
     for item in n_grams:
-        if (item[5]==1):
-            total_key += 1
-        elif (item[5]==0):
-            total_nkey += 1
-
-    key_float = float(total_key)
-    nkey_float = float(total_nkey)
-
-    for item in n_grams:##Likelihood for P(TFIDF|K)
-        if (item[2] ==1 and item[5] == 1):
-            tfk += 1
-    tfk_float = float(tfk)
-    likeli_tfk = float(tfk_float/key_float)
-
-    for item in n_grams:##Likelihood for P(TFIDF|NK)
-        if (item[2] == 1 and item[5] == 0):
-            tfnk += 1
-    tfnk_float = float(tfnk)
-    likeli_tfnk = float(tfnk_float/nkey_float)
-
-    for item in n_grams:##Likelihood for P(NTFIDF|K)
-        if (item[2] == 0 and item[5] == 1):
-            ntfk += 1
-    ntfk_float = float(ntfk)
-    likeli_ntfk = float(ntfk_float/key_float)
-
-    for item in n_grams:##Likelihood for P(NTFIDF|NK)
-        if (item[2] == 0 and item[5] == 0 ):
-            ntfnk += 1
-    ntfnk_float = float(ntfnk)
-    likeli_ntfnk = float(ntfnk_float/nkey_float)
-
-    ##SEEK PRIOR P(TFIDF == 1) AND P(TFIDF == 0)
-    prior_tf = float(likeli_tfk + likeli_tfnk)
-    prior_ntf = float(likeli_ntfk + likeli_ntfnk)
-    #########################################
-
-    for item in n_grams:##Likelihood for P(FIRSEN|K)
-        if (item[3] == 1 and item[5] == 1):
-            fsk += 1
-    fsk_float = float(fsk)
-    likeli_fsk = float(fsk_float/key_float)
-
-    for item in n_grams:##Likelihood for P(FIRSEN|NK)
-        if (item[3] == 1 and item[5] == 0):
-            fsnk += 1
-    fsnk_float = float(fsnk)
-    likeli_fsnk = float(fsnk_float/nkey_float)
-
-    for item in n_grams:##Likelihood for P(NFS|K)
-        if (item[3] == 0 and item[5] == 1):
-            nfsk += 1
-    nfsk_float = float(nfsk)
-    likeli_nfsk = float(nfsk_float/key_float)
-
-    for item in n_grams:##Likelihood for P(NFS|NK)
-        if (item[3] == 0 and item[5] == 0):
-            nfsnk += 1
-    nfsnk_float = float(nfsnk)
-    likeli_nfsnk = float(nfsnk_float/nkey_float)
-
-    ##SEEK PRIOR P(FIRSEN == 1) and P(FIRSEN == 0)
-    prior_fs = float(likeli_fsk + likeli_fsnk)
-    prior_nfs = float(likeli_nfsk + likeli_nfsnk)
-    #########################################
-
-    for item in n_grams:##Likelihood for P(TIT|K)
-        if (item[4] == 1 and item[5] == 1):
-            titk += 1
-    titk_float = float(titk)
-    likeli_titk = float(titk_float/key_float)
-
-    for item in n_grams:##Likelihood for P(TIT|NK)
-        if (item[4] == 1 and item[5] == 0):
-            titnk += 1
-    titnk_float = float(titnk)
-    likeli_titnk = float(titnk_float/nkey_float)
-
-    for item in n_grams:##Likelihood for P(NTIT|K)
-        if(item[4]==0 and item[5]==1):
-            ntitk += 1
-    ntitk_float = float(ntitk)
-    likeli_ntitk = float(ntitk_float/key_float)
-
-    for item in n_grams:##Likelihood for P(NTIT|NK)
-        if(item[4]==0 and item[5]==0):
-            ntitnk += 1
-    ntitnk_float = float(ntitnk)
-    likeli_ntitnk = float(ntitnk_float/nkey_float)
-
-    ##SEEK PRIOR P(TIT ==1) and P(TIT == 0)
-    prior_tit = float(likeli_titk + likeli_titnk)
-    prior_ntit = float(likeli_ntitk + likeli_ntitnk)
-    ############################################
-
-    prior_k = float(likeli_tfk + likeli_ntfk + likeli_fsk + likeli_nfsk + likeli_titk + likeli_ntitk)
-    prior_nk = float(likeli_tfnk + likeli_ntfnk + likeli_fsnk + likeli_nfsnk + likeli_titnk + likeli_ntitnk)
-
-    priors_feats =  prior_k, prior_nk, prior_tf, prior_ntf, prior_fs, prior_nfs, prior_tit, prior_ntit
-    likehoods = likeli_tfk, likeli_tfnk, likeli_ntfk, likeli_ntfnk, likeli_fsk, likeli_fsnk, likeli_nfsk, likeli_nfsnk, likeli_titk, likeli_titnk, likeli_ntitk, likeli_ntitnk
-
-    prior_ke = priors_feats[0]
-    prior_nke = priors_feats[1]
-    prior_tfe = priors_feats[2]
-    prior_ntfe = priors_feats[3]
-    prior_fse = priors_feats[4]
-    prior_nfse = priors_feats[5]
-    prior_tite = priors_feats[6]
-    prior_ntite = priors_feats[7]
-    likeli_tfke = likehoods[0]
-    likeli_tfnke = likehoods[1]
-    likeli_ntfke = likehoods[2]
-    likeli_ntfnke = likehoods[3]
-    likeli_fske = likehoods[4]
-    likeli_fsnke = likehoods[5]
-    likeli_nfske = likehoods[6]
-    likeli_nfsnke = likehoods[7]
-    likeli_titke = likehoods[8]
-    likeli_titnke = likehoods[9]
-    likeli_ntitke = likehoods[10]
-    likeli_ntitnke = likehoods[11]
-
-    try:
-        pospro_ktf = float((likeli_tfke*prior_ke)/prior_tfe)
-    except ZeroDivisionError:
-        pospro_ktf = 0
-    try:
-        pospro_kntf = float((likeli_ntfke*prior_ke)/prior_ntfe)
-    except ZeroDivisionError:
-        pospro_kntf = 0
-    try:
-        pospro_nktf = float((likeli_tfnke*prior_nke)/prior_tfe)
-    except ZeroDivisionError:
-        pospro_nktf = 0
-    try:
-        pospro_nkntf = float((likeli_ntfnke*prior_nke)/prior_ntfe)
-    except ZeroDivisionError:
-        pospro_nkntf = 0
-    try:
-        pospro_kfs = float((likeli_fske*prior_ke)/prior_fse)
-    except ZeroDivisionError:
-        pospro_kfs = 0
-    try:
-        pospro_knfs = float((likeli_nfske*prior_ke)/prior_nfse)
-    except ZeroDivisionError:
-        pospro_knfs = 0
-    try:
-        pospro_nkfs = float((likeli_fsnke*prior_nke)/prior_fse)
-    except ZeroDivisionError:
-        pospro_nkfs = 0
-    try:
-        pospro_nknfs = float((likeli_nfsnke*prior_nke)/prior_nfse)
-    except ZeroDivisionError:
-        pospro_nknfs = 0
-    try:
-        pospro_ktit = float((likeli_titke*prior_ke)/prior_tite)
-    except ZeroDivisionError:
-        pospro_ktit = 0
-    try:
-        pospro_kntit = float((likeli_ntitke*prior_ke)/prior_ntite)
-    except ZeroDivisionError:
-        pospro_kntit = 0
-    try:
-        pospro_nktit = float((likeli_titnke*prior_nk)/prior_tite)
-    except ZeroDivisionError:
-        pospro_nktit = 0
-    try:
-        pospro_nkntit = float((likeli_ntitnke*prior_nke)/prior_ntite)
-    except ZeroDivisionError:
-        pospro_nkntit = 0
+        if (item[2] == 1 and item[5] == 1) or (item[2] == 1 and item[5] == 0):
+            total_num += 1
+    total_str = str(total_num)
     
-    val_bayes = pospro_ktf,pospro_kntf,pospro_nktf,pospro_nkntf,pospro_kfs,pospro_knfs,pospro_nkfs,pospro_nknfs,pospro_ktit,pospro_kntit,pospro_nktit,pospro_nkntit
-    return val_bayes
+    for item in n_grams:
+        if (item[2] == 1 and item[5] ==1):
+            get_kk += 1
+    kk_str = str(get_kk)
+    kk_float = (float(kk_str)/float(total_str))*1
+    this_kk = str(kk_float)
+    
+    for item in n_grams:
+        if (item[2] == 1 and item[5] == 0):
+            get_knk += 1
+    knk_str = str(get_knk)
+    knk_float = (float(knk_str)/float(total_str))*1
+    this_knk = str(knk_float)
 
-##def dist_initial(n_grams, total_num):
+    for item in n_grams:
+        if (item[2] == 0 and item[5] == 1) or (item[2] == 0 and item[5] == 0):
+            total_num2 += 1
+        total_str2 = str(total_num2)
 
-def dist_tfidf (tuple_vals):
-    this_kk = str(tuple_vals[0])
-    this_knk = str(tuple_vals[1])
-    this_nkk = str(tuple_vals[2])
-    this_nknk = str(tuple_vals[3])
+    for item in n_grams:
+        if (item[2] == 0 and item[5] == 1):
+            get_nkk += 1
+    nkk_str = str(get_nkk)
+    nkk_float = (float(nkk_str)/float(total_str2))*1
+    this_nkk = str(nkk_float)
 
-    tfidf_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
+    for item in n_grams:
+        if (item[2] == 0 and item[5] == 0):
+            get_nknk += 1
+    nknk_str = str(get_nknk)
+    nknk_float = (float(nknk_str)/float(total_str2))*1
+    this_nknk = str(nknk_float)
+    
+    tfidf_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
     return tfidf_matx
 
-def dist_firsen (tuple_vals):
-    this_kk = str(tuple_vals[4])
-    this_knk = str(tuple_vals[5])
-    this_nkk = str(tuple_vals[6])
-    this_nknk = str(tuple_vals[7])
+def dist_firsen (n_grams):
+    get_kk = 0
+    get_knk = 0
+    get_nkk = 0
+    get_nknk = 0
+    total_num = 0
+    total_num2 = 0
     
-    firsen_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
+    for item in n_grams:
+        if (item[3] == 1 and item[5] == 1) or (item[3] == 1 and item[5] == 0):
+            total_num += 1
+    total_str = str(total_num)
+    
+    for item in n_grams:
+        if (item[3] == 1 and item[5] ==1):
+            get_kk += 1
+    kk_str = str(get_kk)
+    try:
+        kk_float = (float(kk_str)/float(total_str))*1
+        this_kk = str(kk_float)
+    except ZeroDivisionError:
+        this_kk = str(0)
+    if (this_kk == str(0)):
+        this_kk = str(0.5)
+        
+    for item in n_grams:
+        if (item[3] == 1 and item[5] == 0):
+            get_knk += 1
+    knk_str = str(get_knk)
+    try:
+        knk_float = (float(knk_str)/float(total_str))*1
+        this_knk = str(knk_float)
+    except ZeroDivisionError:
+        this_knk = str(0)
+    if (this_knk == str(0)):
+        this_knk = str(0.5)
+        
+    for item in n_grams:
+        if (item[3] == 0 and item[5] == 1) or (item[3] == 0 and item[5] == 0):
+            total_num2 += 1
+        total_str2 = str(total_num2)
+
+    for item in n_grams:
+        if (item[3] == 0 and item[5] == 1):
+            get_nkk += 1
+    nkk_str = str(get_nkk)
+    try:
+        nkk_float = (float(nkk_str)/float(total_str2))*1
+        this_nkk = str(nkk_float)
+    except ZeroDivisionError:
+        this_nkk = str(0)
+        
+    for item in n_grams:
+        if (item[3] == 0 and item[5] == 0):
+            get_nknk += 1
+    nknk_str = str(get_nknk)
+    try:
+        nknk_float = (float(nknk_str)/float(total_str2))*1
+        this_nknk = str(nknk_float)
+    except ZeroDivisionError:
+        this_nknk = str(0)
+    
+    firsen_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
     return firsen_matx
 
-def dist_title(tuple_vals):
-    this_kk = str(tuple_vals[8])
-    this_knk = str(tuple_vals[9])
-    this_nkk = str(tuple_vals[10])
-    this_nknk = str(tuple_vals[11])
+def dist_title(n_grams):
+    get_kk = 0
+    get_knk = 0
+    get_nkk = 0
+    get_nknk = 0
+    total_num = 0
+    total_num2 = 0
+    
+    for item in n_grams:
+        if (item[4] == 1 and item[5] == 1) or (item[4] == 1 and item[5] == 0):
+            total_num += 1
+    total_str = str(total_num)
+    
+    for item in n_grams:
+        if (item[4] == 1 and item[5] ==1):
+            get_kk += 1
+    kk_str = str(get_kk)
+    try:
+        kk_float = (float(kk_str)/float(total_str))*1
+        this_kk = str(kk_float)
+    except ZeroDivisionError:
+        this_kk = str(0)
+    if (this_kk == str(0)):
+        this_kk = str(0.5)
         
-    title_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
+    for item in n_grams:
+        if (item[4] == 1 and item[5] == 0):
+            get_knk += 1
+    knk_str = str(get_knk)
+    try:
+        knk_float = (float(knk_str)/float(total_str))*1
+        this_knk = str(knk_float)
+    except ZeroDivisionError:
+        this_knk = str(0)
+    if (this_knk == str(0)):
+        this_knk=str(0.5)
+        
+    for item in n_grams:
+        if (item[4] == 0 and item[5] == 1) or (item[4] == 0 and item[5] == 0):
+            total_num2 += 1
+        total_str2 = str(total_num2)
+
+    for item in n_grams:
+        if (item[4] == 0 and item[5] == 1):
+            get_nkk += 1
+    nkk_str = str(get_nkk)
+    try:
+        nkk_float = (float(nkk_str)/float(total_str2))*1
+        this_nkk = str(nkk_float)
+    except ZeroDivisionError:
+        this_nkk = str(0)
+        
+    for item in n_grams:
+        if (item[4] == 0 and item[5] == 0):
+            get_nknk += 1
+    nknk_str = str(get_nknk)
+    try:
+        nknk_float = (float(nknk_str)/float(total_str2))*1
+        this_nknk = str(nknk_float)
+    except ZeroDivisionError:
+        this_nknk = str(0)
+        
+    title_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
     return title_matx
 
-def matrix_txt(filename, matrix):
-    file_name = 'matrices/'+filename
-    if os.path.exists(file_name):
-        os.remove(file_name)
-        print 'Existing file will be replaced with a new file...'
-        with open(file_name, 'w') as f:
-            for line in matrix:
-                np.savetxt(f, line, fmt = '%.2f')
-            print 'File has been replaced.'
-    else:
-        print 'Distributing new file...'
-        with open(file_name, 'w') as f:
-            for line in matrix:
-                np.savetxt(f, line, fmt = '%.2f')
-            print 'File has been successfully distributed.'
-    
 def main():
     get_total = count_total_corpus()
     count = 0
@@ -838,13 +805,12 @@ def main():
             #########################################################
         else:
             print 'Pass4-gram'
-            zip_four_all_feat = ''
         
         uni_collection +=  zip_uni_all_feat
         bi_collection += zip_bi_all_feat
         tri_collection += zip_tri_all_feat
         four_collection += zip_four_all_feat
-        
+
         total_unigram = len(uni_collection) ##UNIGRAM
         total_bigram = len(bi_collection) ##BIGRAM
         total_trigram = len(tri_collection) ##TRIGRAM
@@ -853,50 +819,34 @@ def main():
         print "Document "+n_files+" has been processed."
         count += 1
 
+    ##### GET INITIAL STATES FORA N-GRAMS #####
+    ### MAKE TEXT FOR EVERY THING ###
+    print '########## INITIAL STATES FOR N-GRAMS #########'
+    print dist_initial(uni_collection,total_unigram)
+    print dist_initial(bi_collection,total_bigram)
+    print dist_initial(tri_collection,total_trigram)
+    print dist_initial(four_collection,total_fourgram)
     ############################################
-    get_uni_vals = cal_bayes(uni_collection)
-    get_bi_vals = cal_bayes(bi_collection)
-    get_tri_vals = cal_bayes(tri_collection)
-    get_four_vals = cal_bayes(four_collection)
     ##### GET TFIDF DISTRIBUTIONS #####
     print '########## TFIDF DISTRIBUTIONS FOR N-GRAMS ##########'
-    print dist_tfidf(get_uni_vals)
-    print dist_tfidf(get_bi_vals)
-    print dist_tfidf(get_tri_vals)
-    print dist_tfidf(get_four_vals)
+    print dist_tfidf(uni_collection)
+    print dist_tfidf(bi_collection)
+    print dist_tfidf(tri_collection)
+    print dist_tfidf(four_collection)
     ###################################
     ##### GET FIRST SENTENCE DISTRIBUTIONS #####
     print '########## FIRST SEN. DISTRIBUTIONS FOR N-GRAMS ##########'
-    print dist_firsen(get_uni_vals)
-    print dist_firsen(get_bi_vals)
-    print dist_firsen(get_tri_vals)
-    print dist_firsen(get_four_vals)
+    print dist_firsen(uni_collection)
+    print dist_firsen(bi_collection)
+    print dist_firsen(tri_collection)
+    print dist_firsen(four_collection)
     ############################################
     ##### GET TITLE DISTRIBUTIONS #####
     print '########## TITLE DISTRIBUTIONS FOR N-GRAMS ##########'
-    print dist_title(get_uni_vals)
-    print dist_title(get_bi_vals)
-    print dist_title(get_tri_vals)
-    print dist_title(get_four_vals)
+    print dist_title(uni_collection)
+    print dist_title(bi_collection)
+    print dist_title(tri_collection)
+    print dist_title(four_collection)
     ###################################
-
-    ##### PRODUCE TEXT #####
-    print '########## STORE INTO TEXT ##########'
-    matrix_txt('uni_tf.txt',dist_tfidf(get_uni_vals))
-    matrix_txt('uni_fs.txt',dist_firsen(get_uni_vals))
-    matrix_txt('uni_tit.txt',dist_title(get_uni_vals))
-
-    matrix_txt('bi_tf.txt',dist_tfidf(get_bi_vals))
-    matrix_txt('bi_fs.txt',dist_firsen(get_bi_vals))
-    matrix_txt('bi_tit.txt',dist_title(get_bi_vals))
-
-    matrix_txt('tri_tf.txt',dist_tfidf(get_tri_vals))
-    matrix_txt('tri_fs.txt',dist_firsen(get_tri_vals))
-    matrix_txt('tri_tit.txt',dist_title(get_tri_vals))
-
-    matrix_txt('four_tf.txt',dist_tfidf(get_four_vals))
-    matrix_txt('four_fs.txt',dist_firsen(get_four_vals))
-    matrix_txt('four_tit.txt',dist_title(get_four_vals))
-    
 if __name__ == '__main__':
     main()

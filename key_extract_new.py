@@ -1,14 +1,12 @@
 from refo import finditer, Predicate, Plus
 from collections import Counter
-from StringIO import StringIO
+
 ##from nltk.corpus import stopwords
 import math
 import nltk
 import re
 import copy
 import glob
-import numpy as np
-
 
 ##cachedStopWords = stopwords.words("english")
 
@@ -110,33 +108,6 @@ def get_val_fpairs(fgram_dict, fourgrams):
     val_pairs = [(fgram_dict[a]+fgram_dict[b]+fgram_dict[c]+fgram_dict[d]) for a,b,c,d in fourgrams]
     return val_pairs
 
-def cal_uni_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
-    file_tfidf = 'matrices/'+name_tfidf
-    file_fs = 'matrices/'+name_fs
-    file_tit = 'matrices/'+name_tit
-    
-    with open(file_tfidf, 'r') as f1:
-        data1 = f1.read()
-        get_tfidf = np.genfromtxt(StringIO(data1), delimiter=" ")
-        ##print get_matx
-    with open(file_fs, 'r') as f2:
-        data2 = f2.read()
-        get_fs = np.genfromtxt(StringIO(data2), delimiter=" ")
-    with open(file_tit, 'r') as f3:
-        data3 = f3.read()
-        get_tit = np.genfromtxt(StringIO(data3), delimiter=" ")
-        
-    for each in ngrams:
-        tfidf_val = str(each[1])
-        avg_val = str(uni_avgs)
-        ini_matx = np.matrix('"'+tfidf_val+' '+avg_val+'"')
-
-        compute_first = ini_matx * get_tfidf
-        compute_second = compute_first * get_fs
-        final_result = compute_second * get_tit
-
-        print final_result
-        
 def main():
     ##set_file_name = raw_input('Enter a file name: ')
     file_name = raw_input('Enter a file name: ')
@@ -619,16 +590,13 @@ def main():
                 four_invol_tit.append(1)
             else:
                 four_invol_tit.append(0)
-        four_tit_feat = zip (get_zipfour_str, get_four_floats,four_tfidf_matx, four_fir_sen, four_invol_tit)
+        four_tit_feat = zip (get_zipfour_str, get_four_floats, four_tfidf_matx, four_fir_sen, four_invol_tit)
         print four_tit_feat
         #################################
 
     else:
         print 'Zero Fourgram'
-        
-    ##print zip_uni_feats, invol_tit_feat, tri_tit_feat, four_tit_feat
-    ##print uni_avg_tfidf
-    cal_uni_matrix(zip_uni_feats, uni_avg_tfidf,'uni_tf.txt','uni_fs.txt','uni_tit.txt')
+
 if __name__ == '__main__':
     main()
 
