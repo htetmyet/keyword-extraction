@@ -38,7 +38,10 @@ def count_nterm_doc(word):
     return num_count
 
 def inverse_df(tot_doc, num_of_x_doc):
-    idf_score = math.log10(1+(tot_doc/num_of_x_doc))
+    try:
+        idf_score = math.log10(1+(tot_doc/num_of_x_doc))
+    except ZeroDivisionError:
+        idf_score = 0
     return idf_score
 
 def convert_to_string(text):
@@ -48,7 +51,7 @@ def convert_to_string(text):
     return get_string
 
 def remov_stopword(text):
-    stopwords = open ('smartstoplist.txt', 'r').read().splitlines()
+    stopwords = open ('nothesmartstoplist.txt', 'r').read().splitlines()
     text = ' '.join([word for word in text.split() if word not in stopwords])
     return text
 
@@ -256,51 +259,51 @@ def cal_bayes(n_grams):## DISTRIBUTING LIKELIHOOD
     try:
         pospro_ktf = float((likeli_tfke*prior_ke)/prior_tfe)
     except ZeroDivisionError:
-        pospro_ktf = 0
+        pospro_ktf = 0.1
     try:
         pospro_kntf = float((likeli_ntfke*prior_ke)/prior_ntfe)
     except ZeroDivisionError:
-        pospro_kntf = 0
+        pospro_kntf = 0.1
     try:
         pospro_nktf = float((likeli_tfnke*prior_nke)/prior_tfe)
     except ZeroDivisionError:
-        pospro_nktf = 0
+        pospro_nktf = 0.1
     try:
         pospro_nkntf = float((likeli_ntfnke*prior_nke)/prior_ntfe)
     except ZeroDivisionError:
-        pospro_nkntf = 0
+        pospro_nkntf = 0.1
     try:
         pospro_kfs = float((likeli_fske*prior_ke)/prior_fse)
     except ZeroDivisionError:
-        pospro_kfs = 0
+        pospro_kfs = 0.1
     try:
         pospro_knfs = float((likeli_nfske*prior_ke)/prior_nfse)
     except ZeroDivisionError:
-        pospro_knfs = 0
+        pospro_knfs = 0.1
     try:
         pospro_nkfs = float((likeli_fsnke*prior_nke)/prior_fse)
     except ZeroDivisionError:
-        pospro_nkfs = 0
+        pospro_nkfs = 0.1
     try:
         pospro_nknfs = float((likeli_nfsnke*prior_nke)/prior_nfse)
     except ZeroDivisionError:
-        pospro_nknfs = 0
+        pospro_nknfs = 0.1
     try:
         pospro_ktit = float((likeli_titke*prior_ke)/prior_tite)
     except ZeroDivisionError:
-        pospro_ktit = 0
+        pospro_ktit = 0.1
     try:
         pospro_kntit = float((likeli_ntitke*prior_ke)/prior_ntite)
     except ZeroDivisionError:
-        pospro_kntit = 0
+        pospro_kntit = 0.1
     try:
         pospro_nktit = float((likeli_titnke*prior_nk)/prior_tite)
     except ZeroDivisionError:
-        pospro_nktit = 0
+        pospro_nktit = 0.1
     try:
         pospro_nkntit = float((likeli_ntitnke*prior_nke)/prior_ntite)
     except ZeroDivisionError:
-        pospro_nkntit = 0
+        pospro_nkntit = 0.1
     
     val_bayes = pospro_ktf,pospro_kntf,pospro_nktf,pospro_nkntf,pospro_kfs,pospro_knfs,pospro_nkfs,pospro_nknfs,pospro_ktit,pospro_kntit,pospro_nktit,pospro_nkntit
     return val_bayes
@@ -313,7 +316,7 @@ def dist_tfidf (tuple_vals):
     this_nkk = str(tuple_vals[2])
     this_nknk = str(tuple_vals[3])
 
-    tfidf_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
+    tfidf_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
     return tfidf_matx
 
 def dist_firsen (tuple_vals):
@@ -322,7 +325,7 @@ def dist_firsen (tuple_vals):
     this_nkk = str(tuple_vals[6])
     this_nknk = str(tuple_vals[7])
     
-    firsen_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
+    firsen_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
     return firsen_matx
 
 def dist_title(tuple_vals):
@@ -331,7 +334,7 @@ def dist_title(tuple_vals):
     this_nkk = str(tuple_vals[10])
     this_nknk = str(tuple_vals[11])
         
-    title_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
+    title_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
     return title_matx
 
 def matrix_txt(filename, matrix):

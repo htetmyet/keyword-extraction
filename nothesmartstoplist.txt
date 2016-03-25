@@ -1,4 +1,14 @@
+wouldn
+ain
+ll
+didn
+couldn
+you
+ve
+You
 a
+don
+can t
 This
 a's
 able
@@ -561,6 +571,8 @@ yes
 yet
 you
 you'd
+you ll
+you d
 you'll
 you're
 you've
@@ -570,3 +582,67 @@ yourself
 yourselves
 z
 zero
+according to
+across from
+ahead of 
+along with
+alongside of
+apart from
+as for
+as from
+as of
+as per
+as to
+aside from
+away from
+beased on
+because of
+close by
+close to
+contrary to
+compared to
+compared with
+due to
+depending on
+except for
+exclusive of
+contrary to
+followed by
+inside of
+instead of
+irrespective of
+next to
+near to
+off of
+out of
+outside of
+owing to
+preliminary to
+preparatory to
+previous to
+prior to
+pursuant to
+regardless of
+subsequent to
+such as
+thanks to
+together with
+by means of
+in accordance with
+in addition to
+in case of
+in front of
+in lieu of
+in place of
+in spite of
+on account of
+on behalf of
+on top of
+with regard to
+with respect to
+as well as
+not to mention
+but also
+but not
+instead of rather than
+but rather

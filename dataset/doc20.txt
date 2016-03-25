@@ -1,0 +1,20 @@
+Microsoft to bring post-breach detection to Windows 10 security
+Microsoft announced a new tool today called Windows Defender Advanced Threat Protection designed to help IT detect threats to Windows 10 machines after a threat has penetrated the network. 
+
+While most security strategy to this point has focused on keeping bad actors out of the network, there is a sense of inevitability that no matter how careful a company is that the defenses will break down at some point and hackers will find a way, especially as these attacks become increasingly sophisticated. 
+
+¡°We¡¯re seeing increasingly brazen cyberattacks. Cybercriminals are well organized with an alarming emergence of state-sponsored attacks, cyber-espionage and cyber terror. Even with the best defense, sophisticated attackers are using social engineering and zero-day vulnerabilities to break-in to corporate networks,¡±  Terry Myerson, Microsoft¡¯s executive vice president of the windows and device group wrote in a blog post describing the new product. 
+
+With Windows Defender Advanced Threat Protection, IT pros can decide which Windows 10 devices they wish to monitor. The new tool searches for problems using machine learning based on Microsoft¡¯s Security Graph, the growing collection of security intelligence information the company has accumulated and continues to gather. It compares this vast repository of security data against Windows 10 machines running on the network. If the system detects a probable issue, it informs IT and lets admins investigate further. 
+
+Myerson points that with machine learning it¡¯s about probability of a problem, not necessarily a definitive indication that something has happened, so the system informs the admins about a potential issue and lets them decide how to handle it. For example, the database could include information on an IP address on internet known to give commands to a bot net. If the system finds Windows 10 devices on the network have accessed this IP address, it will inform IT and let the administrators decide if the company has been attacked. 
+
+If the administrators determine it is an actual attack, they can take actions to isolate the affected machines. Microsoft is also promising more advanced remediation tools in a future version of the product. 
+
+It¡¯s worth noting that this product is focused on securing only Windows 10 machines for now. It doesn¡¯t work with older versions of Windows and it doesn¡¯t help detect these types of breaches across the broader network. It is an attempt to bring advanced threat detection to Windows 10 devices, not a comprehensive security tool. 
+
+The company has been doing early private testing on 500,000 devices as it developed the product. The tool is going to be released to wider testing soon, although Myerson wouldn¡¯t give an exact date for the launch of the wider test. 
+
+It¡¯s worth noting that IBM announced a series of moves yesterday designed to help customers deal with post-breach activity as companies realize there is a market not just for preventing attacks, but also for dealing with post-breach planning and response. 
+
+Today¡¯s announcement is Microsoft¡¯s first stab at attacking that part of the market. 

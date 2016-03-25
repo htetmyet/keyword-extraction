@@ -1,0 +1,20 @@
+iOS app store revenue now 80 percent higher than Google Play, thanks to China
+The move to larger-screened iPhones has led to China becoming Apple¡¯s most important market, according to a new report from App Annie analyzing the impact the country has had on App Store revenues in the region since the launch of the iPhone 6 and 6 Plus last year. According to the analytics firm¡¯s findings, China led all countries in absolute growth in the third quarter of this year versus the prior quarter, in terms of both iOS app downloads and revenue. 
+
+Meanwhile, Google Play still leads in sheer number of downloads thanks to growth in emerging markets like India and Southeast Asia, though iOS is still tops when it comes to revenue. 
+
+In other words, the Asian app economy is impacting both the iOS App Store and Google Play, but it¡¯s pushing the two down different paths. 
+
+In the third quarter, worldwide downloads were 90% higher on Google Play versus the iOS App Store, up from its earlier 85% lead in the prior quarter. This growth is being contributed to emerging markets like India, Indonesia, and Vietnam, where sub-$50 smartphones are bringing more of the population online. 
+However, these newly mobile users will not necessarily help the Google Play store¡¯s revenue grow, given their economic status. App Annie instead advises developers to target new users at the lower-end of the market, catering to their differing needs, in order to stand out from the competition here. 
+
+Currently, India, in particular, is having a huge impact on download growth for Google Play. For example, in Q3, it was one of the three largest markets by downloads for both Facebook and WhatsApp. The country is also Google Play¡¯s third-largest by downloads, as well as the world¡¯s third-largest smartphone market. And there¡¯s room for substantial growth yet ? smartphone penetration in India is only in the 10-15% range, notes App Annie. 
+
+The iOS App Store, on the other hand, may not have the downloads but its revenue was 80% higher than Google Play in Q3, up from 70% in Q2. This is largely due to China, of course. China already surpassed the U.S. by iOS downloads earlier this year, and now those download numbers have translated into revenues. 
+
+The growth of iOS in China, says App Annie, is being driven across two fronts: social video apps and games. The former includes apps like the Dubsmash-like lip syncing app iCastShow and a Vine-like app called MiaoPai, both of which have been climbing the charts in Q3. In addition, the popularity of apps that users create shareable content for existing social networks also indicates China¡¯s app ecosystem is maturing, noted the report, as it means that the first layer of social networking apps have already been established. 
+
+Beyond the social video apps, taxi booking app Didi Dache also saw strong growth during the quarter as it battled Uber in the region. 
+However, when it comes to app revenue in China, growth is largely influenced by games. Tencent more recently has seen significant revenue growth thanks to new games The Legend of Mir 2 and The King of Fighters¡¯ 98 Ultimate Match. NetEase¡¯s game, Fantasy Westward Journey, also continues to do well. 
+
+But China is not yet the top country by revenue on the iOS App Store, though it¡¯s #1 for downloads. Instead, that title is still held by the U.S., and is followed by Japan. It will be interesting to see if this changes over time ? especially now that Apple has released two more larger-screened phones with the iPhone 6s and 6s Plus. 
