@@ -9,6 +9,9 @@ import re
 import copy
 import glob
 import numpy as np
+import time
+
+start_time = time.time()
 
 
 ##cachedStopWords = stopwords.words("english")
@@ -47,10 +50,10 @@ class W(Predicate):
         m2 = self.pos.match(word.pos)
         return m1 and m2
 
-def term_frequency(w_tf):
-    tf_score = 1 + math.log10(w_tf)
+def term_frequency(w_tf, max_scr):
+    tf_score = 0.5 + (0.5*(w_tf/max_scr))
     return tf_score
-
+ 
 def count_total_corpus():
     tot_corpus =  len(glob.glob1("dataset","doc*.txt"))
     return tot_corpus
@@ -135,7 +138,6 @@ def cal_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
         tfidf_val = str(each[1])
         avg_val = str(uni_avgs)
         ini_matx = np.matrix('"'+tfidf_val+' '+avg_val+'"')
-
         compute_first = ini_matx * get_tfidf
         compute_second = compute_first * get_fs
         final_result = compute_second * get_tit
@@ -249,8 +251,8 @@ def cal_four_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
             print each[0]+'[K]'
             key_words.append(each[0])
         else:
-            pass
-            ##print each[0]+'[NK]'
+            ##pass
+            print each[0]+'[NK]'
 
     return key_words
 def main():
@@ -277,6 +279,7 @@ def main():
     num_sent = len(token_txt) #Number of sentences
     token_word = [nltk.word_tokenize(sent) for sent in token_txt]
     pos_tag = [nltk.pos_tag(sent) for sent in token_word]
+    
     
     ##print title
     print "Sentence: ", num_sent
@@ -340,9 +343,9 @@ def main():
     for k, s in enumerate(get_nouns):
         for match in finditer(get_uni_gram, s):
             x, y = match.span() #the match spans x to y inside the sentence s
-            ##print pos_tag[k][x:y]
+            #print pos_tag[k][x:y]
             bag_of_NP += pos_tag[k][x:y]
-
+            
     ###############      
     #Term Frequency for unigrams    
     ##print "\nUnigram Feature Matrices:"
@@ -351,16 +354,25 @@ def main():
     str_uni_grams = ''
     total_docs = count_total_corpus()
     fdist = nltk.FreqDist(bag_of_NP)
-    
+    print fdist
     ##STORE UNIGRAMS
     unzipped_uni = zip(*bag_of_NP)
     str_unigrams = list(unzipped_uni[0])
     get_unigrams = zip(str_unigrams,str_unigrams[1:])[::1]
     ###############
+    
+    ##UNI MAXIMUM TermScore##
+    scores = []
+    for word in fdist:
+        score = fdist[word]
+        scores.append(score)
+    max_uni = max(scores)
+    ######################
+ 
     for word in fdist:
         fq_word = fdist[word]
         ##print '%s->%d' % (word, fq_word)
-        get_tf = term_frequency(fq_word)
+        get_tf = term_frequency(fq_word, max_uni)
 
         ### FEATURES ###
         ##Tuple to String##
@@ -409,6 +421,7 @@ def main():
         else:
             uni_feat_tfidf.append(0)
     zip_tfidf_feat = zip(get_zip_str, get_uni_float, uni_feat_tfidf)
+    ##print zip_tfidf_feat
     ###############################
     ##### First Sentence Feat #####
     uni_fir_sen = []
@@ -449,16 +462,23 @@ def main():
     unzipped = zip(*bag_of_biNP)
     str_bigrams = list(unzipped[0])
     get_bigrams = zip(str_bigrams,str_bigrams[1:])[::2]
-    
     ###############
     
     ##print "\nBigram Feature Matrices:"
     bi_dist = nltk.FreqDist(bag_of_biNP)
+
+    ##BI MAXIMUM TermScore##
+    bi_scores = []
     for word in bi_dist:
-        
+        score = bi_dist[word]
+        bi_scores.append(score)
+    max_bi = max(bi_scores)
+    ######################
+    
+    for word in bi_dist:
         tq_word = bi_dist[word]
         ##print '%s-->%d' % (word, tq_word)
-        get_tf = term_frequency(tq_word)
+        get_tf = term_frequency(tq_word, max_bi)
         
         ### FEATURES ###
         ##Tuple to String##
@@ -560,10 +580,18 @@ def main():
     
     ##print "\nTrigram Feature Matrices:"
     tri_dist = nltk.FreqDist(bag_of_triNP)
+
+    ##TRI MAXIMUM TermScore##
+    tri_scores = []
+    for word in tri_dist:
+        score = tri_dist[word]
+        tri_scores.append(score)
+    max_tri = max(tri_scores)
+    ######################
     for word in tri_dist:
         tr_fq = tri_dist[word]
         ##print '%s-->%d' % (word, tr_fq)
-        get_tf = term_frequency(tr_fq)
+        get_tf = term_frequency(tr_fq, max_tri)
     
         ### FEATURES ###
         ##Tuple to String##
@@ -658,15 +686,22 @@ def main():
         get_fourgrams = zip(str_fourgrams,str_fourgrams[1:],str_fourgrams[2:],str_fourgrams[3:])[::4]
         ###############
 
-        
         #Term Frequency for 4-grams
         total__tfidf = 0
         ##print "\n4-grams Feature Matrices:"
         f_dist = nltk.FreqDist(bag_of_fourNP)
+
+        ##4 MAXIMUM TermScore##
+        four_scores = []
+        for word in f_dist:
+            score = f_dist[word]
+            four_scores.append(score)
+        max_four = max(four_scores)
+        ######################
         for word in f_dist:
             fr_fq = f_dist[word]
             ##print '%s-->%d' % (word, fr_fq)
-            get_tf = term_frequency(fr_fq)
+            get_tf = term_frequency(fr_fq, max_four)
 
             ### FEATURES ###
             ##Tuple to String##
@@ -742,7 +777,7 @@ def main():
     else:
         four_tit_feat = ''
         print 'Zero Fourgram\n'
-        
+      
     ##print zip_uni_feats, invol_tit_feat, tri_tit_feat, four_tit_feat
     ##print uni_avg_tfidf,real_avg_tfidf, tri_avg_tfidf,four_avg_tfidf
     key_unigram = cal_matrix(zip_uni_feats, uni_avg_tfidf,'uni_tf.txt','uni_fs.txt','uni_tit.txt')
@@ -755,13 +790,23 @@ def main():
         print 'No 4-grams in document.'
         get_all_keywords = key_unigram + key_bigram + key_trigram
         print len(get_all_keywords),' keywords for total n-grams.'
+        get_time = (time.time() - start_time)
+        get_milli = get_time*1000
+        print("--- %s seconds ---" % get_time) 
     else:
         key_four = cal_four_matrix(four_tit_feat, four_avg_tfidf,'four_tf.txt','four_fs.txt','four_tit.txt')
-        
         ##get_all_keywords = key_unigram + key_bigram + key_trigram + key_four
         get_all_keywords = key_unigram + key_bigram + key_trigram + key_four
         print len(get_all_keywords),' keywords for total n-grams.'
+        get_time = (time.time() - start_time)
+        get_milli = get_time*1000
+        print("--- %s seconds ---" % get_time)
+    ##GET SUMMARY##
     summary(key_unigram, title, prettify_txt)
+    
 if __name__ == '__main__':
     main()
+    get_time = (time.time() - start_time)
+    get_milli = get_time*1000
+    print("--- %s seconds ---" % get_time) 
 

@@ -15,8 +15,8 @@ def get_val_fpairs(fgram_dict, fourgrams):
     val_pairs = [(fgram_dict[a]+fgram_dict[b]+fgram_dict[c]+fgram_dict[d]) for a,b,c,d in fourgrams]
     return val_pairs
 
-def term_frequency(w_tf):
-    tf_score = 1 + math.log10(w_tf)
+def term_frequency(w_tf, max_scr):
+    tf_score = 0.5 + (0.5*(w_tf/max_scr))
     return tf_score
 
 def count_total_corpus():
@@ -28,7 +28,7 @@ def count_nterm_doc(word):
     get_total = count_total_corpus()
     while (get_total>0):
         n_files = str(get_total)
-        get_doc = open('dataset/doc'+n_files+'.txt', 'r')
+        get_doc = open('traindata/doc'+n_files+'.txt', 'r')
         raw_doc = get_doc.read()
         if word in raw_doc:
            num_count += 1
@@ -316,7 +316,7 @@ def dist_tfidf (tuple_vals):
     this_nkk = str(tuple_vals[2])
     this_nknk = str(tuple_vals[3])
 
-    tfidf_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
+    tfidf_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
     return tfidf_matx
 
 def dist_firsen (tuple_vals):
@@ -325,7 +325,7 @@ def dist_firsen (tuple_vals):
     this_nkk = str(tuple_vals[6])
     this_nknk = str(tuple_vals[7])
     
-    firsen_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
+    firsen_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
     return firsen_matx
 
 def dist_title(tuple_vals):
@@ -334,7 +334,7 @@ def dist_title(tuple_vals):
     this_nkk = str(tuple_vals[10])
     this_nknk = str(tuple_vals[11])
         
-    title_matx = np.matrix('"'+this_kk+' '+this_knk+'; '+this_nkk+' '+this_nknk+'"')
+    title_matx = np.matrix('"'+this_kk+' '+this_nkk+'; '+this_knk+' '+this_nknk+'"')
     return title_matx
 
 def matrix_txt(filename, matrix):
@@ -502,9 +502,17 @@ def main():
         unzip_unigram = zip(*bag_of_NP)
         str_unigrams = list(unzip_unigram[0])
         
+        ##UNI MAXIMUM TermScore##
+        scores = []
+        for word in fdist:
+            score = fdist[word]
+            scores.append(score)
+        max_uni = max(scores)
+        ######################
+        
         for word in fdist:
             fq_word = fdist[word]
-            get_tf = term_frequency(fq_word)
+            get_tf = term_frequency(fq_word, max_uni)
 
             to_string = ':'.join(word)
             get_this_string = convert_to_string(to_string)
@@ -579,9 +587,18 @@ def main():
         str_bigrams = list(unzip_bigram[0])
         get_bigrams = zip(str_bigrams, str_bigrams[1:])[::2]
         bi_dist = nltk.FreqDist(bag_of_biNP)
+
+        ##BI MAXIMUM TermScore##
+        bi_scores = []
+        for word in bi_dist:
+            score = bi_dist[word]
+            bi_scores.append(score)
+        max_bi = max(bi_scores)
+        ######################
+    
         for word in bi_dist:
             tq_word = bi_dist[word]
-            get_tf = term_frequency(tq_word)
+            get_tf = term_frequency(tq_word, max_bi)
         
             ### FEATURES ###
             ##Tuple to String##
@@ -669,9 +686,17 @@ def main():
         get_trigrams = zip(str_trigrams, str_trigrams[1:], str_trigrams[2:])[::3]
         tri_dist = nltk.FreqDist(bag_of_triNP)
 
+        ##TRI MAXIMUM TermScore##
+        tri_scores = []
+        for word in tri_dist:
+            score = tri_dist[word]
+            tri_scores.append(score)
+        max_tri = max(tri_scores)
+        ######################
+    
         for word in tri_dist:
             tr_fq = tri_dist[word]
-            get_tf = term_frequency(tr_fq)
+            get_tf = term_frequency(tr_fq, max_tri)
     
             ### FEATURES ###
             ##Tuple to String##
@@ -761,10 +786,17 @@ def main():
             get_fourgrams = zip(str_fourgrams, str_fourgrams[1:], str_fourgrams[2:], str_fourgrams[3:])[::4]
             ############################
             f_dist = nltk.FreqDist(bag_of_fourNP)
-
+            ##4 MAXIMUM TermScore##
+            four_scores = []
+            for word in f_dist:
+                score = f_dist[word]
+                four_scores.append(score)
+            max_four = max(four_scores)
+            ######################
+            
             for word in f_dist:
                 fr_fq = f_dist[word]
-                get_tf = term_frequency(fr_fq)
+                get_tf = term_frequency(fr_fq, max_four)
 
                 ### FEATURES ###
                 ##Tuple to String##

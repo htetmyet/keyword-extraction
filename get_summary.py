@@ -90,6 +90,7 @@ def find_chain(all_nouns, key_nn):
             else:
                 pass
         chain_train.append(temp_chain)
+        ##print temp_chain
     return chain_train
 
 def score_chain(chain, key_nouns, rel_nouns):
@@ -266,7 +267,7 @@ def summary(keywords, title, content):
     print title,'\n'
     print '########## SUMMARY ##########\n'
     
-    if (get_sum_len>5):
+    if (get_sum_len>7):
         get_five = get_summary[:5]
         for each in get_five:
             print each[2],'\n'
