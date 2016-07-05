@@ -121,8 +121,12 @@ def cal_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
     file_tfidf = 'matrices/'+name_tfidf
     file_fs = 'matrices/'+name_fs
     file_tit = 'matrices/'+name_tit
+
     total_vals = []
     key_words = []
+
+    total_res = []
+    
     with open(file_tfidf, 'r') as f1:
         data1 = f1.read()
         get_tfidf = np.genfromtxt(StringIO(data1), delimiter=" ")
@@ -141,6 +145,7 @@ def cal_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
         compute_first = ini_matx * get_tfidf
         compute_second = compute_first * get_fs
         final_result = compute_second * get_tit
+
         ##Decide K or NK
         get_fir_res = final_result.item((0, 0))
         get_sec_res = final_result.item((0, 1))
@@ -176,6 +181,10 @@ def cal_tri_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
     with open(file_tit, 'r') as f3:
         data3 = f3.read()
         get_tit = np.genfromtxt(StringIO(data3), delimiter=" ")
+
+        total_res.append(final_result)
+
+    return total_res
         
     for each in ngrams:
         tfidf_val = str(each[1])
@@ -779,6 +788,7 @@ def main():
         print 'Zero Fourgram\n'
       
     ##print zip_uni_feats, invol_tit_feat, tri_tit_feat, four_tit_feat
+
     ##print uni_avg_tfidf,real_avg_tfidf, tri_avg_tfidf,four_avg_tfidf
     key_unigram = cal_matrix(zip_uni_feats, uni_avg_tfidf,'uni_tf.txt','uni_fs.txt','uni_tit.txt')
     print '\n'
@@ -803,7 +813,13 @@ def main():
         print("--- %s seconds ---" % get_time)
     ##GET SUMMARY##
     summary(key_unigram, title, prettify_txt)
-    
+
+    ##print uni_avg_tfidf,real_avg_tfidf,tri_avg_tfidf,four_avg_tfidf
+    cal_matrix(zip_uni_feats, uni_avg_tfidf,'uni_tf.txt','uni_fs.txt','uni_tit.txt')
+    cal_matrix(invol_tit_feat, real_avg_tfidf, 'bi_tf.txt','bi_fs.txt','bi_tit.txt')
+    cal_matrix(tri_tit_feat, tri_avg_tfidf, 'tri_tf.txt','tri_fs.txt','tri_tit.txt')
+    cal_matrix(four_tit_feat, four_avg_tfidf, 'four_tf.txt','four_fs.txt','four_tit.txt')
+
 if __name__ == '__main__':
     main()
     get_time = (time.time() - start_time)
