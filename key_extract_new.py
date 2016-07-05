@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from refo import finditer, Predicate, Plus
 from collections import Counter
 from StringIO import StringIO
@@ -811,7 +810,7 @@ if __name__ == '__main__':
     get_milli = get_time*1000
     print("--- %s seconds ---" % get_time) 
 
-=======
+
 from refo import finditer, Predicate, Plus
 from collections import Counter
 from StringIO import StringIO
@@ -1638,6 +1637,4 @@ if __name__ == '__main__':
     main()
     get_time = (time.time() - start_time)
     get_milli = get_time*1000
-    print("--- %s seconds ---" % get_time) 
-
->>>>>>> origin/master
+    print("--- %s seconds ---" % get_time)
