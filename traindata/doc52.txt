@@ -1,0 +1,17 @@
+Uber is finally creating a dedicated R&D team on the ground in India
+Uber is increasing its focus on India, the country that it foresees becoming its second largest behind only China in the coming years, with plans to establish its first dedicated engineering team in the South Asian country in the coming months. 
+
+Right now, Uber has a section of its team in San Francisco that is dedicated to shaping its service to the needs of Indian consumers, but it is actively working to open a base on the ground in Bangalore that will focus on local tweaks and modifications for India ? where it is challenged by Ola, its local rival valued at $5 billion. Uber has debuted new features in India, such as its in-journey SOS button and status sharing feature, but a team on the ground will enable locally-relevant features to be created and deployed far quicker. 
+
+¡°When Uber sets up engineering offices, our goal is to give the teams high impact projects and a considerable amount of autonomy. Currently we have engineering teams travelling to India and once this Bangalore team is established they will be aligning frequently,¡± Satish Shah, head of India recruitment at Uber, said in a statement. 
+
+Uber confirmed that the team ? which will be called the ¡®India growth product engineering team¡¯ ? will consist of software engineers and products managers and will be up and running in the first quarter of this year. So that¡¯s before the end of March. 
+
+This important news for Uber¡¯s India business initially dropped between Christmas and New Year, getting relatively little coverage from press. While Uber declined to be specific on the potential headcount, TechCrunch can confirm from a company source that the India growth product engineering team will initially be 20-25 people in size, with the potential to increase that number ¡°significantly¡± in the future. 
+
+Uber currently covers 22 cities in India, where it reportedly completes 250,000 rides a day. Ola, by contrast, services 102 cities and does close to one million rides per day, so an Ola company source recently revealed to TechCrunch. 
+
+Despite early difficulties in India, which included a temporary shutdown of its service in New Delhi following the rape of a passenger, Uber is bullish about India. The U.S. company committed $1 billion to grow its business in India, but ? like China ? it is up against a formidable ally in the form of Ola, which has a business alliance with fellow Uber rivals Lyft, GrabTaxi and Didi Kuaidi. 
+
+Outside of its headquarters in the U.S., Uber also has four engineering bases in Europe ? Amsterdam (Netherlands), Sofia (Bulgaria), Aarhus (Denmark) and Vilnius (Lithuania) ? which makes this Bangalore outpost its first in Asia. 
+Uber,India,team,engineering,Asian,consumers,Bangalore,modifications,impact,recruitment,engineers,TechCrunch,headcount,engineering team,local rival,SOS button,new features,India journey,feature team, relevant features,India Bangalore,Lyft GrabTaxi,grow business,Didi Kuaidi,temporary shutdown,high impact projects,the potential headcount,the India growth,the U.S.Uber,Christmas New Year,the India growth product
