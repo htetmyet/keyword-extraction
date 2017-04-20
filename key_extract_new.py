@@ -1,3 +1,5 @@
+__author__ = "Htet Myet Lynn"
+
 from refo import finditer, Predicate, Plus
 from collections import Counter
 from StringIO import StringIO
@@ -148,7 +150,7 @@ def cal_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
             print each[0]+'[K]'
             key_words.append(each[0])
         else:
-            ##print each[0]+'[NK]'
+            print each[0]+'[NK]'
             pass
     return key_words
         
@@ -200,7 +202,7 @@ def cal_tri_matrix(ngrams, uni_avgs, name_tfidf, name_fs, name_tit):
             print each[0]+'[K]'
             key_words.append(each[0])
         else:
-            ##print each[0]+'[NK]'
+            print each[0]+'[NK]'
             pass
     return key_words
         
@@ -442,7 +444,7 @@ def main():
         else:
             uni_title_feat.append(0)
     zip_uni_feats = zip(get_zip_str, get_uni_float, uni_feat_tfidf, uni_fir_sen, uni_title_feat)
-    ##print zip_uni_feats
+    
     ################################
     ##print "\n\n"
     ###################################GET BIGRAMS###################################
@@ -514,7 +516,7 @@ def main():
     ###Bigrams string with TFIDF###
     bigrams_list =  zip(get_zip_str, get_bi_floats)
     ###########################
-    ##print bigrams_list
+    
     
     ##print '===============***==============='
     ##print 'Total Bigrams: ', len(get_bi_floats)
@@ -554,7 +556,7 @@ def main():
         else:
             feat_invol_tit.append(0)
     invol_tit_feat = zip (get_zip_str, get_bi_floats, feat_tfidf_matx, feat_fir_sen, feat_invol_tit)
-    ##print invol_tit_feat
+    invol_tit_feat
     #################################
     ##print "\n\n"
     
@@ -661,7 +663,7 @@ def main():
         else:
             tri_invol_tit.append(0)
     tri_tit_feat = zip (get_ziptri_str, get_tri_floats, tri_tfidf_matx, tri_fir_sen, tri_invol_tit)
-    ##print tri_tit_feat
+    
     #################################
     ##print "\n\n"
 
@@ -771,7 +773,7 @@ def main():
             else:
                 four_invol_tit.append(0)
         four_tit_feat = zip (get_zipfour_str, get_four_floats,four_tfidf_matx, four_fir_sen, four_invol_tit)
-        ##print four_tit_feat
+        
         #################################
 
     else:
@@ -802,7 +804,7 @@ def main():
         get_milli = get_time*1000
         print("--- %s seconds ---" % get_time)
     ##GET SUMMARY##
-    summary(key_unigram, title, prettify_txt)
+    ##summary(key_unigram, title, prettify_txt)
     
 if __name__ == '__main__':
     main()
